@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
-import { Category } from 'src/modules/category/entities/category.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-
+import { Cart } from 'src/modules/cart/entities/cart.entity';
+import { Categories } from 'src/modules/categories/entities/categories.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 @Entity()
 export class Product {
 
@@ -14,10 +13,10 @@ export class Product {
     @Column()
       price: number;
 
-    @Column('text')
+    @Column()
       description_small: string;
 
-    @Column('text')
+    @Column()
       description_full: string;
 
     @Column()
@@ -25,9 +24,9 @@ export class Product {
 
     @Column()
       quantity: number;
-
-    @OneToMany(()=> Category, (category) => category.product)
-      category: Category[];
+    
+    @ManyToOne(() => Cart, (cart) => cart.products)
+      cart: Cart;
 
     @CreateDateColumn()
       created_at: Date;

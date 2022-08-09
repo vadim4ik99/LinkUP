@@ -1,34 +1,35 @@
-/* eslint-disable @typescript-eslint/explicit-member-accessibility */
 import { Cart } from 'src/modules/cart/entities/cart.entity';
-import { Orders } from 'src/modules/order/entities/order.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Images } from 'src/modules/common/entities/images.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
+  OneToOne, JoinColumn  } from 'typeorm';
 
 @Entity()
 export class User {
-
     @PrimaryGeneratedColumn()
       id: number;
 
-    @Column({ length:100 })
+    @Column()
       first_name: string;
 
-    @Column({ length:100 })
-      last_name: string;
+    @Column()
+      last_name: string;   
 
     @Column()
       verify: boolean;
 
-    @Column({ length:100 })
-      email: string;
-
     @Column()
-      avatar: string;
+      email: string;
 
     @Column()
       password: string;
 
-    @OneToMany(()=> Orders, (order)=> order.user)
-      orders: Orders[];
+    @OneToOne(() => Cart )
+    @JoinColumn()
+    cart: Cart;
+
+    @OneToOne(() => Images )
+    @JoinColumn()
+    image: Images;
 
     @CreateDateColumn()
       created_at: Date;
