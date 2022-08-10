@@ -15,28 +15,28 @@ export enum ImageType {
 @Entity()
 export class Images {
 
-    @PrimaryGeneratedColumn()
-      id: number;
+  @PrimaryGeneratedColumn()
+  public id!: number;
 
-    @Column()
-      path: string;
+  @Column()
+  public path!: string;
 
-    @Column()
-      size: string;
+  @Column()
+  public size!: string;
 
-    @Column({type: "enum", enum: ImageType})
-      type: ImageType;
+  @Column({ type: 'enum', enum: ImageType })
+  public type!: ImageType;
 
-    @ManyToOne(() => Product, (product) => product.images)
-      product: Product;
+  @ManyToOne(() => Product, (product) => product.images)
+  public product!: Product;
 
-    @ManyToOne(() => Categories, (category) => category.images)
-        category: Categories;
+  @ManyToOne(() => Categories, (category) => category.images)
+  public  category!: Categories;
 
-    @CreateDateColumn()
-      created_at: Date;
+  @CreateDateColumn()
+  public created_at!: Date;
 
-    @UpdateDateColumn()
-      updated_at: Date;
+  @UpdateDateColumn()
+  public updated_at!: Date;
 
 }

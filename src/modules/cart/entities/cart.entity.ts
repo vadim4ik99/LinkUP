@@ -1,14 +1,19 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Product } from 'src/modules/product/entities/product.entity';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Cart {
 
-    @PrimaryGeneratedColumn()
-      id!: number;
+  @PrimaryGeneratedColumn()
+  public id!: number;
 
-    @CreateDateColumn()
-      created_at: Date;
+  @OneToMany(() => Product, (product) => product.cart)
+  public products!: Product[];
 
-    @UpdateDateColumn()
-      updated_at: Date;
+  @CreateDateColumn()
+  public created_at!: Date;
+
+  @UpdateDateColumn()
+  public updated_at!: Date;
+
 }

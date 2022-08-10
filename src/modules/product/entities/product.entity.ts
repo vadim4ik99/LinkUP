@@ -1,37 +1,54 @@
 import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Categories } from 'src/modules/categories/entities/categories.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { CategoryProduct } from 'src/modules/common/entities/category-product.entity';
+import { Images } from 'src/modules/common/entities/images.entity';
+import { OrderProduct } from 'src/modules/common/entities/order-product.entity';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
+  ManyToOne, OneToMany } from 'typeorm';
+
 @Entity()
 export class Product {
 
-    @PrimaryGeneratedColumn()
-      id: number;
+  @PrimaryGeneratedColumn()
+  public id!: number;
 
-    @Column()
-      title: string;
+  @Column()
+  public title!: string;
 
-    @Column()
-      price: number;
+  @Column()
+  public price!: number;
 
-    @Column()
-      description_small: string;
+  @Column()
+  public description_small!: string;
 
-    @Column()
-      description_full: string;
+  @Column()
+  public description_full!: string;
 
-    @Column()
-      sold: number;
+  @Column()
+  public sold!: number;
 
-    @Column()
-      quantity: number;
-    
-    @ManyToOne(() => Cart, (cart) => cart.products)
-      cart: Cart;
+  @Column()
+  public quantity!: number;
 
-    @CreateDateColumn()
-      created_at: Date;
+  @ManyToOne(() => Cart, (cart) => cart.products)
+  public cart!: Cart;
 
-    @UpdateDateColumn()
-      updated_at: Date;
+  @OneToMany(() => Categories, (cat) => cat.product)
+  public categories!: Categories[];
+
+  @OneToMany(() => Images, (image) => image.product)
+  public images!: Images[];
+
+  @OneToMany(() => CategoryProduct, (cat_prod) => cat_prod.product)
+  public category_product!: CategoryProduct[];
+
+  @OneToMany(() => OrderProduct, (order_prod) => order_prod.product)
+  public order_product!: OrderProduct[];
+
+  @CreateDateColumn()
+  public created_at!: Date;
+
+  @UpdateDateColumn()
+  public updated_at!: Date;
 
 }

@@ -1,40 +1,45 @@
 import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Images } from 'src/modules/common/entities/images.entity';
+import { Order } from 'src/modules/order/entities/order.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
-  OneToOne, JoinColumn  } from 'typeorm';
+  OneToOne, JoinColumn, OneToMany  } from 'typeorm';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-      id: number;
 
-    @Column()
-      first_name: string;
+  @PrimaryGeneratedColumn()
+  public id!: number;
 
-    @Column()
-      last_name: string;   
+  @Column()
+  public first_name!: string;
 
-    @Column()
-      verify: boolean;
+  @Column()
+  public last_name!: string;
 
-    @Column()
-      email: string;
+  @Column()
+  public verify!: boolean;
 
-    @Column()
-      password: string;
+  @Column()
+  public email!: string;
 
-    @OneToOne(() => Cart )
-    @JoinColumn()
-    cart: Cart;
+  @Column()
+  public password!: string;
 
-    @OneToOne(() => Images )
-    @JoinColumn()
-    image: Images;
+  @OneToOne(() => Cart )
+  @JoinColumn()
+  public cart!: Cart;
 
-    @CreateDateColumn()
-      created_at: Date;
+  @OneToOne(() => Images )
+  @JoinColumn()
+  public image!: Images;
 
-    @UpdateDateColumn()
-      updated_at: Date;
+  @OneToMany(() => Order, (order) => order.user)
+  public orders!: Order[];
+
+  @CreateDateColumn()
+  public created_at!: Date;
+
+  @UpdateDateColumn()
+  public updated_at!: Date;
 
 }
