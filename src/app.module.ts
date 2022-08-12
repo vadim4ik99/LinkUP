@@ -3,14 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { User } from './modules/user/entities/user.entity';
-import { Cart } from './modules/cart/entities/cart.entity';
-import { Order } from './modules/order/entities/order.entity';
-import { Images } from './modules/common/entities/images.entity';
-import { Product } from './modules/product/entities/product.entity';
-import { Categories } from './modules/categories/entities/categories.entity';
-import { CategoryProduct } from './modules/common/entities/category-product.entity';
-import { OrderProduct } from './modules/common/entities/order-product.entity';
+import { UserEntity } from './modules/user/entities/user.entity';
+import { CartEntity } from './modules/cart/entities/cart.entity';
+import { OrderEntity } from './modules/order/entities/order.entity';
+import { ImagesEntity } from './modules/common/entities/images.entity';
+import { ProductEntity } from './modules/product/entities/product.entity';
+import { CategoriesEntity } from './modules/categories/entities/categories.entity';
+import { CategoryProductEntity } from './modules/product/entities/category-product.entity';
+import { OrderProductEntity } from './modules/product/entities/order-product.entity';
 
 @Module({
   imports: [
@@ -26,7 +26,8 @@ import { OrderProduct } from './modules/common/entities/order-product.entity';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Cart, Order, Images, Product, Categories, CategoryProduct, OrderProduct],
+        entities: [UserEntity, CartEntity, OrderEntity, ImagesEntity, ProductEntity, CategoriesEntity,
+          CategoryProductEntity, OrderProductEntity],
         synchronize: true,
       }),
       inject: [ConfigService],

@@ -1,11 +1,11 @@
-import { CategoryProduct } from 'src/modules/common/entities/category-product.entity';
-import { Images } from 'src/modules/common/entities/images.entity';
-import { Product } from 'src/modules/product/entities/product.entity';
+import { CategoryProductEntity } from '../../product/entities/category-product.entity';
+import { ImagesEntity } from '../../common/entities/images.entity';
+import { ProductEntity } from '../../product/entities/product.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
   ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
-export class Categories {
+export class CategoriesEntity {
 
   @PrimaryGeneratedColumn()
   public id!: number;
@@ -13,19 +13,19 @@ export class Categories {
   @Column()
   public name!: string;
 
-  @ManyToOne(() => Product, (product) => product.categories)
-  public product!: Product;
+  @ManyToOne(() => ProductEntity, (product) => product.categories)
+  public product!: ProductEntity;
 
-  @OneToMany(() => Images ,(image) => image.category)
-  public images!: Images[];
+  @OneToMany(() => ImagesEntity ,(image) => image.category)
+  public images!: ImagesEntity[];
 
-  @OneToMany(() => CategoryProduct ,(cat_prod) => cat_prod.category)
-  public category_product!: CategoryProduct[];
+  @OneToMany(() => CategoryProductEntity ,(catProd) => catProd.category)
+  public categoryProduct!: CategoryProductEntity[];
 
   @CreateDateColumn()
-  public created_at!: Date;
+  public createdAat!: Date;
 
   @UpdateDateColumn()
-  public updated_at!: Date;
+  public updatedAt!: Date;
 
 }

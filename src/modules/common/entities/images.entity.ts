@@ -1,5 +1,5 @@
-import { Categories } from 'src/modules/categories/entities/categories.entity';
-import { Product } from 'src/modules/product/entities/product.entity';
+import { CategoriesEntity } from 'src/modules/categories/entities/categories.entity';
+import { ProductEntity } from 'src/modules/product/entities/product.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, UpdateDateColumn } from 'typeorm';
 
 export enum ImageType {
@@ -13,7 +13,7 @@ export enum ImageType {
 }
 
 @Entity()
-export class Images {
+export class ImagesEntity {
 
   @PrimaryGeneratedColumn()
   public id!: number;
@@ -27,11 +27,11 @@ export class Images {
   @Column({ type: 'enum', enum: ImageType })
   public type!: ImageType;
 
-  @ManyToOne(() => Product, (product) => product.images)
-  public product!: Product;
+  @ManyToOne(() => ProductEntity, (product) => product.images)
+  public product!: ProductEntity;
 
-  @ManyToOne(() => Categories, (category) => category.images)
-  public  category!: Categories;
+  @ManyToOne(() => CategoriesEntity, (category) => category.images)
+  public  category!: CategoriesEntity;
 
   @CreateDateColumn()
   public created_at!: Date;

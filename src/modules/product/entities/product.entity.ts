@@ -1,13 +1,13 @@
-import { Cart } from 'src/modules/cart/entities/cart.entity';
-import { Categories } from 'src/modules/categories/entities/categories.entity';
-import { CategoryProduct } from 'src/modules/common/entities/category-product.entity';
-import { Images } from 'src/modules/common/entities/images.entity';
-import { OrderProduct } from 'src/modules/common/entities/order-product.entity';
+import { CartEntity } from '../../cart/entities/cart.entity';
+import { CategoriesEntity } from '../../categories/entities/categories.entity';
+import { CategoryProductEntity } from './category-product.entity';
+import { ImagesEntity } from '../../common/entities/images.entity';
+import { OrderProductEntity } from './order-product.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
   ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
-export class Product {
+export class ProductEntity {
 
   @PrimaryGeneratedColumn()
   public id!: number;
@@ -18,11 +18,11 @@ export class Product {
   @Column()
   public price!: number;
 
-  @Column()
-  public description_small!: string;
+  @Column('text')
+  public descriptionSmall!: string;
 
-  @Column()
-  public description_full!: string;
+  @Column('text')
+  public descriptionFull!: string;
 
   @Column()
   public sold!: number;
@@ -30,25 +30,25 @@ export class Product {
   @Column()
   public quantity!: number;
 
-  @ManyToOne(() => Cart, (cart) => cart.products)
-  public cart!: Cart;
+  @ManyToOne(() => CartEntity, (cart) => cart.products)
+  public cart!: CartEntity;
 
-  @OneToMany(() => Categories, (cat) => cat.product)
-  public categories!: Categories[];
+  @OneToMany(() => CategoriesEntity, (cat) => cat.product)
+  public categories!: CategoriesEntity[];
 
-  @OneToMany(() => Images, (image) => image.product)
-  public images!: Images[];
+  @OneToMany(() => ImagesEntity, (image) => image.product)
+  public images!: ImagesEntity[];
 
-  @OneToMany(() => CategoryProduct, (cat_prod) => cat_prod.product)
-  public category_product!: CategoryProduct[];
+  @OneToMany(() => CategoryProductEntity, (catProd) => catProd.product)
+  public categoryProduct!: CategoryProductEntity[];
 
-  @OneToMany(() => OrderProduct, (order_prod) => order_prod.product)
-  public order_product!: OrderProduct[];
+  @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.product)
+  public orderProduct!: OrderProductEntity[];
 
   @CreateDateColumn()
-  public created_at!: Date;
+  public createdAt!: Date;
 
   @UpdateDateColumn()
-  public updated_at!: Date;
+  public updatedAt!: Date;
 
 }

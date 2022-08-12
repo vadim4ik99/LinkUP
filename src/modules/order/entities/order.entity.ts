@@ -1,5 +1,5 @@
-import { OrderProduct } from 'src/modules/common/entities/order-product.entity';
-import { User } from 'src/modules/user/entities/user.entity';
+import { OrderProductEntity } from '../../product/entities/order-product.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
   ManyToOne, OneToMany } from 'typeorm';
 
@@ -11,7 +11,7 @@ export enum OrderStatus {
 }
 
 @Entity()
-export class Order {
+export class OrderEntity {
 
   @PrimaryGeneratedColumn()
   public id!: number;
@@ -19,16 +19,16 @@ export class Order {
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PACKING })
   public status!: OrderStatus;
 
-  @ManyToOne(() => User, (user) => user.orders)
-  public user!: User;
+  @ManyToOne(() => UserEntity, (user) => user.orders)
+  public user!: UserEntity;
 
-  @OneToMany(() => OrderProduct, (order_prod) => order_prod.order)
-  public order_product!: OrderProduct[];
+  @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.order)
+  public orderProduct!: OrderProductEntity[];
 
   @CreateDateColumn()
-  public created_at!: Date;
+  public createdAt!: Date;
 
   @UpdateDateColumn()
-  public updated_at!: Date;
+  public updatedAt!: Date;
 
 }

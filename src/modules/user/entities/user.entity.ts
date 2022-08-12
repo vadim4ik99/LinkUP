@@ -1,11 +1,11 @@
-import { Cart } from 'src/modules/cart/entities/cart.entity';
-import { Images } from 'src/modules/common/entities/images.entity';
-import { Order } from 'src/modules/order/entities/order.entity';
+import { CartEntity } from 'src/modules/cart/entities/cart.entity';
+import { ImagesEntity } from 'src/modules/common/entities/images.entity';
+import { OrderEntity } from 'src/modules/order/entities/order.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
   OneToOne, JoinColumn, OneToMany  } from 'typeorm';
 
 @Entity()
-export class User {
+export class UserEntity {
 
   @PrimaryGeneratedColumn()
   public id!: number;
@@ -25,16 +25,16 @@ export class User {
   @Column()
   public password!: string;
 
-  @OneToOne(() => Cart )
+  @OneToOne(() => CartEntity )
   @JoinColumn()
-  public cart!: Cart;
+  public cart!: CartEntity;
 
-  @OneToOne(() => Images )
+  @OneToOne(() => ImagesEntity )
   @JoinColumn()
-  public image!: Images;
+  public image!: ImagesEntity;
 
-  @OneToMany(() => Order, (order) => order.user)
-  public orders!: Order[];
+  @OneToMany(() => OrderEntity, (order) => order.user)
+  public orders!: OrderEntity[];
 
   @CreateDateColumn()
   public created_at!: Date;
