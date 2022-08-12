@@ -1,9 +1,10 @@
 export class CartDTO {
 
-  private products: number[];
+  //public products: ProductDTO[];
+  public id: number;
 
-  constructor(products: number[]) {
-    this.products = products;
+  constructor(id: number ) {
+    this.id = id;
   }
 
 }

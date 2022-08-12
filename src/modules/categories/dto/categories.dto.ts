@@ -1,11 +1,12 @@
 export class CategoriesDTO {
 
-  private name: string;
-  private img: number[];
+  public id: number;
+  public name: string;
+  //private img: number[];
 
-  constructor(name: string, img: number[]) {
+  constructor(id: number, name: string) {
     this.name = name;
-    this.img =  img;
+    this.id =  id;
   }
 
 }
