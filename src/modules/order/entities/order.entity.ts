@@ -4,10 +4,10 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
   ManyToOne, OneToMany } from 'typeorm';
 
 export enum OrderStatus {
-    PAID = 'paid',
-    PACKING = 'packing',
-    SHIPPING = 'shipping',
-    DELIVERED = 'deliverd'
+  PAID = 'paid',
+  PACKING = 'packing',
+  SHIPPING = 'shipping',
+  DELIVERED = 'deliverd'
 }
 
 @Entity()
@@ -23,7 +23,7 @@ export class OrderEntity {
   public user!: UserEntity;
 
   @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.order)
-  public orderProduct!: OrderProductEntity[];
+  public orderProducts!: OrderProductEntity[];
 
   @CreateDateColumn()
   public createdAt!: Date;

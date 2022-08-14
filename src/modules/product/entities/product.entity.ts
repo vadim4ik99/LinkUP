@@ -4,7 +4,7 @@ import { CategoryProductEntity } from './category-product.entity';
 import { ImagesEntity } from '../../common/entities/images.entity';
 import { OrderProductEntity } from './order-product.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
-  ManyToOne, OneToMany } from 'typeorm';
+  ManyToOne, OneToMany, OneToOne } from 'typeorm';
 
 @Entity()
 export class ProductEntity {
@@ -30,20 +30,20 @@ export class ProductEntity {
   @Column()
   public quantity!: number;
 
-  @ManyToOne(() => CartEntity, (cart) => cart.products)
-  public cart!: CartEntity;
+  @OneToOne(() => ImagesEntity, (image) => image.product)
+  public image!: ImagesEntity;
 
-  @OneToMany(() => CategoriesEntity, (cat) => cat.product)
-  public categories!: CategoriesEntity[];
-
-  @OneToMany(() => ImagesEntity, (image) => image.product)
-  public images!: ImagesEntity[];
+  @OneToMany(() => CartEntity, (cart) => cart.product)
+  public carts!: CartEntity[];
 
   @OneToMany(() => CategoryProductEntity, (catProd) => catProd.product)
   public categoryProduct!: CategoryProductEntity[];
 
   @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.product)
   public orderProduct!: OrderProductEntity[];
+
+  @ManyToOne(() => CategoriesEntity, (cat) => cat.products)
+  public category!: CategoriesEntity;
 
   @CreateDateColumn()
   public createdAt!: Date;

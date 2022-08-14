@@ -2,7 +2,7 @@ import { CategoryProductEntity } from '../../product/entities/category-product.e
 import { ImagesEntity } from '../../common/entities/images.entity';
 import { ProductEntity } from '../../product/entities/product.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
-  ManyToOne, OneToMany } from 'typeorm';
+  OneToMany, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class CategoriesEntity {
@@ -13,17 +13,18 @@ export class CategoriesEntity {
   @Column()
   public name!: string;
 
-  @ManyToOne(() => ProductEntity, (product) => product.categories)
-  public product!: ProductEntity;
+  @OneToOne(() => ImagesEntity, (image) => image.category)
+  @JoinColumn()
+  public image!: ImagesEntity;
 
-  @OneToMany(() => ImagesEntity ,(image) => image.category)
-  public images!: ImagesEntity[];
+  @OneToMany(() => ProductEntity, (product) => product.category)
+  public products!: ProductEntity[];
 
-  @OneToMany(() => CategoryProductEntity ,(catProd) => catProd.category)
+  @OneToMany(() => CategoryProductEntity, (catProd) => catProd.category)
   public categoryProduct!: CategoryProductEntity[];
 
   @CreateDateColumn()
-  public createdAat!: Date;
+  public createdAt!: Date;
 
   @UpdateDateColumn()
   public updatedAt!: Date;
