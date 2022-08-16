@@ -1,8 +1,16 @@
 import { CartEntity } from '../../cart/entities/cart.entity';
 import { ImagesEntity } from '../../common/entities/images.entity';
 import { OrderEntity } from '../../order/entities/order.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
-  OneToOne, JoinColumn, OneToMany  } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
 export class UserEntity {
