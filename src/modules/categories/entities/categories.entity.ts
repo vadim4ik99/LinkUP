@@ -1,8 +1,16 @@
 import { CategoryProductEntity } from '../../product/entities/category-product.entity';
 import { ImagesEntity } from '../../common/entities/images.entity';
 import { ProductEntity } from '../../product/entities/product.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
-  OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class CategoriesEntity {

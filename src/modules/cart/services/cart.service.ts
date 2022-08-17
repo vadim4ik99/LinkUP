@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { CartService } from './cart.service.abstract';
 
 @Injectable()
-export class CartService {
+export class CartServiceImpl extends CartService {
 
 }

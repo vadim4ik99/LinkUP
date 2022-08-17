@@ -1,7 +1,14 @@
 import { OrderProductEntity } from '../../product/entities/order-product.entity';
 import { UserEntity } from '../../user/entities/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
-  ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 export enum OrderStatus {
   PAID = 'paid',

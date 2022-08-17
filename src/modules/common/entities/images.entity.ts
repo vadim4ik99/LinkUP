@@ -1,7 +1,13 @@
 import { CategoriesEntity } from '../../categories/entities/categories.entity';
 import { ProductEntity } from '../../product/entities/product.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn,
-  UpdateDateColumn, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
+} from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 
 export enum ImageType {

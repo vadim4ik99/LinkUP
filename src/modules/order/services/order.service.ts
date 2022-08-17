@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { OrderService } from './order.service.abstract';
 
 @Injectable()
-export class OrderService {
+export class OrderServiceImpl extends OrderService {
 
 }

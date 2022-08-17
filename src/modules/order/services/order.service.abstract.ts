@@ -1,4 +1,4 @@
-export abstract class OrderAbstract {
+export abstract class OrderService {
 /*
     abstract order_list();
     abstract create_order();

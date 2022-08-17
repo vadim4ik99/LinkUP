@@ -1,4 +1,4 @@
-export abstract class CategoriesAbstract {
+export abstract class CategoriesService {
 /*
     abstract categories_list();
     abstract create_category();

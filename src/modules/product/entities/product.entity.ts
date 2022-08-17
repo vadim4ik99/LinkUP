@@ -3,8 +3,16 @@ import { CategoriesEntity } from '../../categories/entities/categories.entity';
 import { CategoryProductEntity } from './category-product.entity';
 import { ImagesEntity } from '../../common/entities/images.entity';
 import { OrderProductEntity } from './order-product.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn,
-  ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 @Entity()
 export class ProductEntity {

@@ -2,12 +2,21 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { CartController } from './controllers/cart.controller';
 import { CartEntity } from './entities/cart.entity';
+import { CartRepository, cartRepositoryFactory } from './repositories/cart.repository';
+import { CartServiceImpl } from './services/cart.service';
+import { CartService } from './services/cart.service.abstract';
 
-import { CartService } from './services/cart.service';
+const cartRepository = {
+  provide: CartRepository,
+  inject: ['DATA_SOURCE'],
+  useFactory: cartRepositoryFactory,
+};
+
+const cartService = { provide: CartService, useClass: CartServiceImpl };
 
 @Module({
   imports: [TypeOrmModule.forFeature([CartEntity])],
   controllers: [CartController],
-  providers: [CartService],
+  providers: [cartService, cartRepository],
 })
 export class CartModule {}
