@@ -15,6 +15,6 @@ export class CategoryProductEntity {
   public category!: CategoriesEntity;
 
   @CreateDateColumn()
-  public created_at!: Date;
+  public createdAt!: Date;
 
 }

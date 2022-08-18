@@ -17,6 +17,9 @@ const userService = { provide: UserService, useClass: UserServiceImpl };
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [UserController],
-  providers: [userService, userRepository],
+  providers: [
+    userService,
+    userRepository,
+  ],
 })
 export class UserModule {}

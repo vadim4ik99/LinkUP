@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
+import { TypeOrmModule } from '@nestjs/typeorm/';
 import { CategoriesController } from './controllers/categories.controller';
 import { CategoriesEntity } from './entities/categories.entity';
 import { CategoryRepository, categoryRepositoryFactory } from './repositories/categories.repository';

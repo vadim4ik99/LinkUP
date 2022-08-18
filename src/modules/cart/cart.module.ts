@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartController } from './controllers/cart.controller';
 import { CartEntity } from './entities/cart.entity';
 import { CartRepository, cartRepositoryFactory } from './repositories/cart.repository';
