@@ -1,19 +1,29 @@
+import { IsEmail, IsInt, IsNotEmpty, IsString } from 'class-validator';
+
 export class UserDTO {
 
-  public id: number;
-  public firstName: string;
-  public lastName: string;
-  public email: string;
-  public password: string;
-  //public avatar;
+  @IsInt()
+  @IsNotEmpty()
+  public id!: number;
 
-  constructor(id: number, firstName: string, lastName:string, email: string, password: string) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
-  }
+  @IsString()
+  @IsNotEmpty()
+  public firstName!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public lastName!: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  public email!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public password!: string;
+
+  @IsInt()
+  public avatar!: number;
 
 }
 

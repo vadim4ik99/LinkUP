@@ -1,12 +1,15 @@
 import { IsInt, IsNotEmpty } from 'class-validator';
 
-export class CartDTO {
+export class CategoryProductDTO {
 
   @IsInt()
   @IsNotEmpty()
   public id!: number;
 
   @IsInt()
-  public userId!: number;
+  public categoryId!: number;
+
+  @IsInt()
+  public productId!: number;
 
 }

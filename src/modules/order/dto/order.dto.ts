@@ -1,17 +1,20 @@
-import type { OrderStatus } from '../entities/order.entity';
+import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { OrderStatus } from '../entities/order.entity';
 
 export class OrderDTO {
 
-  public id: number;
-  public name: string;
-  //public img: number[];
-  public status: OrderStatus;
+  @IsInt()
+  @IsNotEmpty()
+  public id!: number;
 
-  constructor(name: string, id: number, status: OrderStatus) {
-    this.name = name;
-    this.id =  id;
-    this.status = status;
-  }
+  @IsString()
+  public name!: string;
+
+  @IsInt()
+  public imgId!: number;
+
+  @IsEnum(OrderStatus)
+  public status!: OrderStatus;
 
 }
 

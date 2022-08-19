@@ -4,8 +4,7 @@ import { Entity,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
+  RelationId,
 } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 
@@ -18,9 +17,14 @@ export class CartEntity {
   @ManyToOne(() => ProductEntity, (product) => product.carts)
   public product!: ProductEntity;
 
-  @OneToOne(() => UserEntity, (user) => user.cart)
-  @JoinColumn()
+  @RelationId((cart: CartEntity) => cart.product)
+  public productId!: number;
+
+  @ManyToOne(() => UserEntity, (user) => user.carts)
   public user!: UserEntity;
+
+  @RelationId((cart: CartEntity) => cart.user)
+  public userId!: number;
 
   @CreateDateColumn()
   public createdAt!: Date;

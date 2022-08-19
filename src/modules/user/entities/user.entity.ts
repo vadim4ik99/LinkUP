@@ -1,5 +1,5 @@
 import { CartEntity } from '../../cart/entities/cart.entity';
-import { ImagesEntity } from '../../common/entities/images.entity';
+import { FileEntity } from '../../common/entities/images.entity';
 import { OrderEntity } from '../../order/entities/order.entity';
 import {
   Entity,
@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
   OneToMany,
+  ManyToOne,
+  RelationId,
 } from 'typeorm';
 
 @Entity()
@@ -33,13 +33,14 @@ export class UserEntity {
   @Column()
   public password!: string;
 
-  @OneToOne(() => CartEntity, (cart) => cart.user)
-  @JoinColumn()
-  public cart!: CartEntity;
+  @OneToMany(() => CartEntity, (cart) => cart.user)
+  public carts!: CartEntity[];
 
-  @OneToOne(() => ImagesEntity, (image) => image.user)
-  @JoinColumn()
-  public image!: ImagesEntity;
+  @ManyToOne(() => FileEntity, (avatar) => avatar.users)
+  public avatar!: FileEntity;
+
+  @RelationId((user: UserEntity) => user.avatar)
+  public avatarId!: number;
 
   @OneToMany(() => OrderEntity, (order) => order.user)
   public orders!: OrderEntity[];

@@ -1,12 +1,16 @@
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+
 export class CategoriesDTO {
 
-  public id: number;
-  public name: string;
-  //private img: number[];
+  @IsInt()
+  @IsNotEmpty()
+  public id!: number;
 
-  constructor(id: number, name: string) {
-    this.name = name;
-    this.id =  id;
-  }
+  @IsString()
+  @IsNotEmpty()
+  public name!: string;
+
+  @IsInt()
+  public imgId!: number;
 
 }

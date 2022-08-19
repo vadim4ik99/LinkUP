@@ -1,7 +1,6 @@
 import { CartEntity } from '../../cart/entities/cart.entity';
-import { CategoriesEntity } from '../../categories/entities/categories.entity';
 import { CategoryProductEntity } from './category-product.entity';
-import { ImagesEntity } from '../../common/entities/images.entity';
+import { FileEntity } from '../../common/entities/images.entity';
 import { OrderProductEntity } from './order-product.entity';
 import {
   Entity,
@@ -9,10 +8,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
   OneToMany,
-  OneToOne,
-  JoinColumn,
+  ManyToOne,
+  RelationId,
 } from 'typeorm';
 
 @Entity()
@@ -39,21 +37,20 @@ export class ProductEntity {
   @Column()
   public quantity!: number;
 
-  @OneToOne(() => ImagesEntity, (image) => image.product)
-  @JoinColumn()
-  public image!: ImagesEntity;
-
   @OneToMany(() => CartEntity, (cart) => cart.product)
   public carts!: CartEntity[];
 
   @OneToMany(() => CategoryProductEntity, (catProd) => catProd.product)
-  public categoryProduct!: CategoryProductEntity[];
+  public categoryProducts!: CategoryProductEntity[];
 
   @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.product)
-  public orderProduct!: OrderProductEntity[];
+  public orderProducts!: OrderProductEntity[];
 
-  @ManyToOne(() => CategoriesEntity, (cat) => cat.products)
-  public category!: CategoriesEntity;
+  @ManyToOne(() => FileEntity, (image) => image.products)
+  public image!:FileEntity;
+
+  @RelationId((product: ProductEntity) => product.image)
+  public imageId!: number;
 
   @CreateDateColumn()
   public createdAt!: Date;

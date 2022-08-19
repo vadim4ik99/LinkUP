@@ -5,8 +5,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 
@@ -21,7 +20,7 @@ export enum ImageType {
 }
 
 @Entity()
-export class ImagesEntity {
+export class FileEntity {
 
   @PrimaryGeneratedColumn()
   public id!: number;
@@ -35,19 +34,16 @@ export class ImagesEntity {
   @Column({ type: 'enum', enum: ImageType })
   public type!: ImageType;
 
-  @OneToOne(() => ProductEntity, (product) => product.image)
-  public product!: ProductEntity;
+  @OneToMany(() => ProductEntity, (product) => product.image)
+  public products!: ProductEntity[];
 
-  @OneToOne(() => CategoriesEntity, (category) => category.image)
-  public category!: CategoriesEntity;
+  @OneToMany(() => CategoriesEntity, (category) => category.image)
+  public categories!: CategoriesEntity[];
 
-  @OneToOne(() => UserEntity, (user) => user.image)
-  public user!: CategoriesEntity;
+  @OneToMany(() => UserEntity, (user) => user.avatar)
+  public users!: CategoriesEntity[];
 
   @CreateDateColumn()
   public createdAt!: Date;
-
-  @UpdateDateColumn()
-  public updatedAt!: Date;
 
 }

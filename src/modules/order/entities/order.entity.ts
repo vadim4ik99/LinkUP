@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  RelationId,
 } from 'typeorm';
 
 export enum OrderStatus {
@@ -28,6 +29,9 @@ export class OrderEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.orders)
   public user!: UserEntity;
+
+  @RelationId((order: OrderEntity) => order.user)
+  public userId!: number;
 
   @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.order)
   public orderProducts!: OrderProductEntity[];
