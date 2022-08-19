@@ -1,5 +1,12 @@
 import { ProductEntity } from '../../product/entities/product.entity';
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToOne } from 'typeorm';
+import { Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 
 @Entity()
@@ -12,6 +19,7 @@ export class CartEntity {
   public product!: ProductEntity;
 
   @OneToOne(() => UserEntity, (user) => user.cart)
+  @JoinColumn()
   public user!: UserEntity;
 
   @CreateDateColumn()

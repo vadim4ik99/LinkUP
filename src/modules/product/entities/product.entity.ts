@@ -12,6 +12,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -39,6 +40,7 @@ export class ProductEntity {
   public quantity!: number;
 
   @OneToOne(() => ImagesEntity, (image) => image.product)
+  @JoinColumn()
   public image!: ImagesEntity;
 
   @OneToMany(() => CartEntity, (cart) => cart.product)
