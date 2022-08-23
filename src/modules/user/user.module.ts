@@ -21,5 +21,6 @@ const userService = { provide: UserService, useClass: UserServiceImpl };
     userService,
     userRepository,
   ],
+  exports: [UserService],
 })
 export class UserModule {}
