@@ -6,6 +6,7 @@ import { AuthServiceImpl } from './services/auth.service';
 import { AuthService } from './services/auth.service.abstract';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
+import { MailModule } from '../mail/mail.module';
 
 const authService = { provide: AuthService, useClass: AuthServiceImpl };
 
@@ -14,6 +15,7 @@ const authService = { provide: AuthService, useClass: AuthServiceImpl };
     UserModule,
     ConfigModule,
     PassportModule,
+    MailModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

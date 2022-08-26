@@ -15,8 +15,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  public validate({ email }: Pick<UserEntity, 'email'>): string {
-    return email;
-  }
+  /* public validate(req, { email }: Pick<UserEntity, 'email'>): string {
+
+  } */
 
 }
