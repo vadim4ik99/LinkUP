@@ -1,16 +1,19 @@
+import type { EmailTamplate } from 'src/modules/mail/services/mail.service';
 import type { UserDTO } from 'src/modules/user/dto/user.dto';
-import type { UserEntity } from 'src/modules/user/entities/user.entity';
+import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 export abstract class AuthService {
 
-    public abstract validateUser(email: string, pass: string): Promise<UserEntity>;
+    public abstract singIn(email: string, password: string): Promise<string>;
 
-    public abstract generateToken(email: string, expiresIn: string, id: number): Promise<string>
+    public abstract singUp(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<boolean>;
 
-    //public abstract login(email: string): Promise<string>;
+    public abstract sendTamplateEmail (user: Pick<UserDTO,'email'>, tamplate: EmailTamplate): Promise<void>;
 
-    public abstract singUp(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<void>;
+    public abstract verifyEmail (token: string): Promise<boolean>;
 
-    public abstract sendWelcomeEmail (user: Pick<UserDTO,'email'>): Promise<void>;
+    public abstract forgotPassword (email: string): Promise<void>;
+
+    public abstract resetPassword (token: string, password: string): Promise<UpdateResult>
 
 }

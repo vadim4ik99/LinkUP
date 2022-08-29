@@ -1,65 +1,74 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { UserServiceImpl } from 'src/modules/user/services/user.service';
 import { AuthService } from './auth.service.abstract';
 import { EmailTamplate, MailServiceImpl } from 'src/modules/mail/services/mail.service';
-import { jwt_decode } from 'jwt-decode'
+import { ConfigService } from '@nestjs/config';
+import type { IPayload } from '../interface/payload.interface';
+import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
-import type { UserEntity } from 'src/modules/user/entities/user.entity';
 import type { UserDTO } from 'src/modules/user/dto/user.dto';
-import { JwtStrategy } from '../strategy/jwt.strategy';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly jwtStrategy: JwtStrategy,
     private readonly userService: UserServiceImpl,
     private readonly mailService: MailServiceImpl,
+    private readonly configService: ConfigService,
   ) {
     super();
   }
 
-  public override async validateUser(email: string, pass: string): Promise<UserEntity> {
+  public override async singIn(email: string, password: string): Promise<string> {
     const user = await this.userService.findUser(email);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-    const correctPassword = await compare(pass, user.password);
+    const correctPassword = await compare(password, user.password);
     if (!correctPassword) {
       throw new UnauthorizedException('Worng password');
     }
-    return user;
+    if (user.verify == false) {
+      throw new UnauthorizedException('You not activated account');
+    }
+    const payload: IPayload = { email, password };
+    return this.jwtService.signAsync(payload);
   }
 
-  /*   public override async login(email: string): Promise<string> {
-    const payload = { email };
-    return await this.jwtService.signAsync(payload);
-  } */
-
-  public override async generateToken(email: string, expiresIn: string, id: number): Promise<string> {
-    const payload = { id, email , expiresIn };
-    return await this.jwtService.signAsync(payload);
+  public override async singUp(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<boolean> {
+    const user = await this.userService.createUser(userDto);
+    await this.sendTamplateEmail(user, EmailTamplate.Welcome);
+    return true;
   }
 
-  public override async singUp(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<void> {
-    const user = this.userService.createUser(userDto);
-    await this.sendWelcomeEmail(await user);
+  public override async sendTamplateEmail (user: Pick<UserDTO,'email'>, tamplate: EmailTamplate): Promise<void> {
+    const expiresIn = { expiresIn: '1d' };
+    const token = await this.jwtService.signAsync(user, expiresIn);
+    await this.mailService.sendEmail(user.email,'Welcome to site', tamplate, token);
   }
 
-  public override async sendWelcomeEmail (user: Pick<UserDTO,'email' | 'id'>): Promise<void> {
-    const token: string = await this.generateToken(user.email, '1d' , user.id );
-    await this.mailService.sendEmail(user.email,'Welcome to site', token, EmailTamplate.Welcome);
+  public override async verifyEmail (token: string): Promise<boolean> {
+    const secret = { secret: this.configService.get<string>('JWT_SECRET') };
+    const data = this.jwtService.verify(token, secret) as IPayload;
+    await this.userService.activateUser(data.email);
+    return true;
   }
 
-  public override async verifyEmail (token: string): Promise<void> {
-    const isActive = this.jwtStrategy.validate();
-    if (!isActive) { throw new UnauthorizedException('You have wrong token'); }
-    const data = jwt_decode(token);
-    await this.userService.activateUser(data.id);
+  public override async forgotPassword (email: string): Promise<void> {
+    const user = await this.userService.findUser(email);
+    if(!user) {
+      throw new NotFoundException('Wrong email');
+    }
+    await this.sendTamplateEmail(user, EmailTamplate.ForgotPassword);
+  }
 
+  public override async resetPassword (token: string, password: string): Promise<UpdateResult> {
+    const secret = { secret: this.configService.get<string>('JWT_SECRET') };
+    const data = this.jwtService.verify(token, secret) as IPayload;
+    return this.userService.updateUserPassword(data.email, password);
   }
 
 }

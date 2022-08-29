@@ -1,4 +1,5 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import type { UpdateResult } from 'typeorm';
 import { Repository } from 'typeorm';
 import { UserRepository } from '../repositories/user.repository';
 import { UserService } from './user.service.abstract';
@@ -18,7 +19,7 @@ export class UserServiceImpl extends UserService {
   }
 
   public override async findUser(email: string): Promise<UserEntity | null> {
-    return await this.usersRepository.findOneBy({ email: email });
+    return await this.usersRepository.findOneBy({ email });
   }
 
   public override async createUser(userDto: Pick <UserDTO, 'email' | 'password'>): Promise<UserEntity> {
@@ -26,7 +27,6 @@ export class UserServiceImpl extends UserService {
     if(checkUser != null) {
       throw new BadRequestException('User already exist');
     }
-
     const salt = await genSalt(10);
     const newUser = {
       email: userDto.email,
@@ -35,9 +35,16 @@ export class UserServiceImpl extends UserService {
     return this.usersRepository.save(newUser);
   }
 
-  public override async activateUser(id: number): Promise<void> {
-    const user = this.usersRepository.findOneBy({ id: id });
-    return true; /// как обновить одно поле? user.verify
+  public override async activateUser(email: string): Promise<UpdateResult> {
+    const user = this.usersRepository.findOneBy({ email });
+    if(user === null) { throw new Error('User is not found'); }
+    return this.usersRepository.update({ email }, { verify: true });
+  }
+
+  public override async updateUserPassword(email: string, password:string): Promise<UpdateResult> {
+    const salt = await genSalt(10);
+    const newPassword = await hash(password, salt);
+    return this.usersRepository.update({ email }, { password: newPassword });
   }
 
 }

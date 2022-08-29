@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { MailService } from './mail.service.abstract';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
+import type { SentMessageInfo } from 'nodemailer';
 
 export enum EmailTamplate {
   Welcome = 'welcome',
-  ForgotPassword = 'forgotpassword'
+  ForgotPassword = 'password'
 }
 
 @Injectable()
@@ -18,15 +19,21 @@ export class MailServiceImpl extends MailService {
     super();
   }
 
-  public sendEmail(email: string, subject: string, token: string, page: EmailTamplate): void {
-    this.mailerService
+  public sendEmail(
+    email: string,
+    subject: string,
+    page: EmailTamplate,
+    token?: string,
+    password?: string): Promise<SentMessageInfo> {
+    return this.mailerService
       .sendMail({
         to: email,
         from: this.configService.get('MAIL_FROM'),
         subject,
-        template: __dirname + page, // The `.pug`, `.ejs` or `.hbs` extension is appended automatically.
+        template: __dirname + page,
         context: {
           token,
+          password,
         },
       });
   }
