@@ -9,6 +9,7 @@ import type { IPayload } from '../interface/payload.interface';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 
 import type { UserDTO } from 'src/modules/user/dto/user.dto';
+import type { UserEntity } from 'src/modules/user/entities/user.entity';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -22,8 +23,9 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public override async singIn(email: string, password: string): Promise<string> {
-    const user = await this.userService.findUser(email);
+  public override async singIn(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<UserEntity> {
+    const password = userDto.password;
+    const user = await this.userService.findUser(userDto);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
@@ -34,17 +36,17 @@ export class AuthServiceImpl extends AuthService {
     if (user.verify == false) {
       throw new UnauthorizedException('You not activated account');
     }
-    const payload: IPayload = { email, password };
-    return this.jwtService.signAsync(payload);
+    await this.loginJwt(user);
+    return user;
   }
 
   public override async singUp(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<boolean> {
     const user = await this.userService.createUser(userDto);
-    await this.sendTamplateEmail(user, EmailTamplate.Welcome);
+    await this.sendEmailTemplate(user, EmailTamplate.Welcome);
     return true;
   }
 
-  public override async sendTamplateEmail (user: Pick<UserDTO,'email'>, tamplate: EmailTamplate): Promise<void> {
+  public override async sendEmailTemplate (user: Pick<UserDTO,'email'>, tamplate: EmailTamplate): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
     const token = await this.jwtService.signAsync(user, expiresIn);
     await this.mailService.sendEmail(user.email,'Welcome to site', tamplate, token);
@@ -57,18 +59,23 @@ export class AuthServiceImpl extends AuthService {
     return true;
   }
 
-  public override async forgotPassword (email: string): Promise<void> {
-    const user = await this.userService.findUser(email);
+  public override async forgotPassword (userDto: Pick<UserDTO, 'email'>): Promise<void> {
+    const user = await this.userService.findUser(userDto);
     if(!user) {
       throw new NotFoundException('Wrong email');
     }
-    await this.sendTamplateEmail(user, EmailTamplate.ForgotPassword);
+    await this.sendEmailTemplate(user, EmailTamplate.ForgotPassword);
   }
 
-  public override async resetPassword (token: string, password: string): Promise<UpdateResult> {
+  public override async resetPassword (token: string, userDto: Pick<UserDTO, 'password'>): Promise<UpdateResult> {
     const secret = { secret: this.configService.get<string>('JWT_SECRET') };
     const data = this.jwtService.verify(token, secret) as IPayload;
-    return this.userService.updateUserPassword(data.email, password);
+    return this.userService.updateUserPassword(data.email, userDto.password);
+  }
+
+  public override async loginJwt (userDto: Pick<UserDTO, 'password' | 'email'>): Promise<unknown> {
+    const payload = { username : userDto.email, password: userDto.password };
+    return { access_token: await this.jwtService.signAsync(payload) };
   }
 
 }
