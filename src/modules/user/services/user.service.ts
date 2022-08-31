@@ -4,9 +4,12 @@ import { UserRepository } from '../repositories/user.repository';
 import { UserService } from './user.service.abstract';
 import { genSalt, hash } from 'bcrypt';
 
-import type { UserDTO } from '../dto/user.dto';
 import type { UserEntity } from '../entities/user.entity';
 import type { UpdateResult } from 'typeorm';
+import type { UserEmailDTO } from '../dto/user-email.dto';
+import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
+import type { AuthUser } from 'src/modules/auth/auth.decorator';
+import type { UserPasswordDTO } from '../dto/user-email.dto copy';
 
 @Injectable()
 export class UserServiceImpl extends UserService {
@@ -18,12 +21,12 @@ export class UserServiceImpl extends UserService {
     super();
   }
 
-  public override async findUser(userDto: Pick <UserDTO, 'email'>): Promise<UserEntity | null> {
+  public override async findUser(userDto: UserEmailDTO): Promise<UserEntity | null> {
     const email = userDto.email;
     return await this.usersRepository.findOneBy({ email });
   }
 
-  public override async createUser(userDto: Pick <UserDTO, 'email' | 'password'>): Promise<UserEntity> {
+  public override async createUser(userDto: CreateUserResponseDto): Promise<UserEntity> {
     const checkUser = this.findUser(userDto);
     if(checkUser != null) {
       throw new BadRequestException('User already exist');
@@ -36,16 +39,16 @@ export class UserServiceImpl extends UserService {
     return this.usersRepository.save(newUser);
   }
 
-  public override async activateUser(email: string): Promise<UpdateResult> {
-    const user = this.usersRepository.findOneBy({ email });
+  public override async activateUser(userDto: UserEmailDTO): Promise<UpdateResult> {
+    const user = this.usersRepository.findOneBy({ email: userDto.email });
     if(user === null) { throw new Error('User is not found'); }
-    return this.usersRepository.update({ email }, { verify: true });
+    return this.usersRepository.update({ email: userDto.email  }, { verify: true });
   }
 
-  public override async updateUserPassword(email: string, password: string): Promise<UpdateResult> {
+  public override async updateUserPassword(user: AuthUser, userDto: UserPasswordDTO): Promise<UpdateResult> {
     const salt = await genSalt(10);
-    const newPassword = await hash(password, salt);
-    return this.usersRepository.update({ email }, { password: newPassword });
+    const newPassword = await hash(userDto.password, salt);
+    return this.usersRepository.update({ email: user.email }, { password: newPassword });
   }
 
 }

@@ -8,9 +8,11 @@ import { ConfigService } from '@nestjs/config';
 
 import type { IPayload } from '../interface/payload.interface';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-import type { UserDTO } from 'src/modules/user/dto/user.dto';
 import type { UserEntity } from 'src/modules/user/entities/user.entity';
 import type { AuthUser } from '../auth.decorator';
+import type { CreateUserResponseDto } from 'src/modules/user/dto/create-user-response.dto';
+import type { UserEmailDTO } from 'src/modules/user/dto/user-email.dto';
+import type { UserPasswordDTO } from 'src/modules/user/dto/user-email.dto copy';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -24,7 +26,7 @@ export class AuthServiceImpl extends AuthService {
     super();
   }
 
-  public override async singIn(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<UserEntity> {
+  public override async singIn(userDto: CreateUserResponseDto): Promise<UserEntity> {
     const password = userDto.password;
     const user = await this.userService.findUser(userDto);
     if (!user) {
@@ -41,16 +43,16 @@ export class AuthServiceImpl extends AuthService {
     return user;
   }
 
-  public override async singUp(userDto: Pick<UserDTO, 'email' | 'password'>): Promise<boolean> {
+  public override async singUp(userDto: CreateUserResponseDto): Promise<boolean> {
     const user = await this.userService.createUser(userDto);
     await this.sendEmailTemplate(user, EmailTamplate.Welcome);
     return true;
   }
 
-  public override async sendEmailTemplate (user: Pick<UserDTO,'email'>, tamplate: EmailTamplate): Promise<void> {
+  public override async sendEmailTemplate (userDto: UserEmailDTO, tamplate: EmailTamplate): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
-    const token = await this.jwtService.signAsync(user, expiresIn);
-    await this.mailService.sendEmail(user.email,'Welcome to site', tamplate, token);
+    const token = await this.jwtService.signAsync(userDto, expiresIn);
+    await this.mailService.sendEmail(userDto.email,'Welcome to site', tamplate, token);
   }
 
   public override async verifyEmail (token: string): Promise<boolean> {
@@ -60,7 +62,7 @@ export class AuthServiceImpl extends AuthService {
     return true;
   }
 
-  public override async forgotPassword (userDto: Pick<UserDTO, 'email'>): Promise<void> {
+  public override async forgotPassword (userDto: CreateUserResponseDto): Promise<void> {
     const user = await this.userService.findUser(userDto);
     if(!user) {
       throw new NotFoundException('Wrong email');
@@ -68,11 +70,11 @@ export class AuthServiceImpl extends AuthService {
     await this.sendEmailTemplate(user, EmailTamplate.ForgotPassword);
   }
 
-  public override async resetPassword (user: AuthUser, password: Pick<UserDTO, 'password'>): Promise<UpdateResult> {
-    return this.userService.updateUserPassword(user.email, password.password);
+  public override async resetPassword (user: AuthUser, userDto: UserPasswordDTO): Promise<UpdateResult> {
+    return this.userService.updateUserPassword(user.email, userDto.password);
   }
 
-  public override async loginJwt (userDto: Pick<UserDTO, 'password' | 'email'>): Promise<unknown> {
+  public override async loginJwt (userDto: CreateUserResponseDto): Promise<unknown> {
     const payload = { username : userDto.email, password: userDto.password };
     return { access_token: await this.jwtService.signAsync(payload) };
   }

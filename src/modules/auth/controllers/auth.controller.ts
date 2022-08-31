@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service.abstract';
 import { RegisterGuard } from '../guard/register.guard';
-
-import type { UserDTO } from 'src/modules/user/dto/user.dto';
-import type { UserEntity } from 'src/modules/user/entities/user.entity';
 import { AuthorizationGuard } from '../guard/authorization.guard';
 import { AuthUser } from '../auth.decorator';
+
 import type { UpdateResult } from 'typeorm';
+import type { UserDTO } from 'src/modules/user/dto/user.dto';
+import type { UserEntity } from 'src/modules/user/entities/user.entity';
 
 @Controller('auth')
 export class AppController {

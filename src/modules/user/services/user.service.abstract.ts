@@ -1,15 +1,18 @@
+import type { AuthUser } from 'src/modules/auth/auth.decorator';
 import type { UpdateResult } from 'typeorm';
-import type { UserDTO } from '../dto/user.dto';
+import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
+import type { UserEmailDTO } from '../dto/user-email.dto';
+import type { UserPasswordDTO } from '../dto/user-email.dto copy';
 import type { UserEntity } from '../entities/user.entity';
 
 export abstract class UserService {
 
-  public abstract findUser(userDto: Pick <UserDTO, 'email'>): Promise<UserEntity | null>;
+  public abstract findUser(userDto: UserEmailDTO): Promise<UserEntity | null>;
 
-  public abstract createUser(userDto: UserDTO): Promise<UserEntity>;
+  public abstract createUser(userDto: CreateUserResponseDto): Promise<UserEntity>;
 
-  public abstract activateUser(email: string): Promise<UpdateResult>;
+  public abstract activateUser(userDto: UserEmailDTO): Promise<UpdateResult>;
 
-  public abstract updateUserPassword(email: string, password: string): Promise<UpdateResult>;
+  public abstract updateUserPassword(user: AuthUser, userDto: UserPasswordDTO): Promise<UpdateResult>;
 
 }
