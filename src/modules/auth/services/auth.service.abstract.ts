@@ -2,6 +2,7 @@ import type { EmailTamplate } from 'src/modules/mail/services/mail.service';
 import type { UserDTO } from 'src/modules/user/dto/user.dto';
 import type { UserEntity } from 'src/modules/user/entities/user.entity';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
+import type { AuthUser } from '../auth.decorator';
 
 export abstract class AuthService {
 
@@ -15,7 +16,7 @@ export abstract class AuthService {
 
     public abstract forgotPassword (userDto: Pick<UserDTO, 'email'>): Promise<void>;
 
-    public abstract resetPassword (token: string, userDto: Pick<UserDTO, 'password'>): Promise<UpdateResult>
+    public abstract resetPassword (user: AuthUser, password: Pick<UserDTO, 'password'>): Promise<UpdateResult>
 
     public abstract loginJwt (userDto: Pick<UserDTO, 'password' | 'email'>): Promise<unknown>
 

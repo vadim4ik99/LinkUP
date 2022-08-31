@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service.abstract';
-import { LocalAuthGuard } from '../guard/local-auth.guard';
-import { JwtAuthGuard } from '../guard/jwt.guard';
+import { RegisterGuard } from '../guard/register.guard';
 
 import type { UserDTO } from 'src/modules/user/dto/user.dto';
 import type { UserEntity } from 'src/modules/user/entities/user.entity';
+import { AuthorizationGuard } from '../guard/authorization.guard';
+import { AuthUser } from '../auth.decorator';
+import type { UpdateResult } from 'typeorm';
 
 @Controller('auth')
 export class AppController {
@@ -16,26 +18,30 @@ export class AppController {
     return this.authService.singUp(userDto);
   }
 
-  @Get('/confirmemail')
+  @UseGuards(RegisterGuard)
+  @Get('/email/confirm')
   public async verifyEmail (@Param('token') token: string): Promise<boolean> {
     return this.authService.verifyEmail(token);
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(RegisterGuard)
   @Post('/login')
   public async signIn (@Body() userDto: Pick<UserDTO, 'email' | 'password'>): Promise<UserEntity> {
     return this.authService.singIn(userDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthorizationGuard)
   @Post('/recovery')
   public async forgotPassword (@Body() userDto: Pick<UserDTO, 'email'>): Promise<void> {
     return this.authService.forgotPassword(userDto);
   }
 
-  /*   @Post('/newpassword') /// як тут з body?
-  public async resetPassword (@Body() token: string,  userDto: Pick<UserDTO, 'password'>) {
-    return this.authService.resetPassword(token, userDto);
-  } */
+  @UseGuards(AuthorizationGuard)
+  @Post('/reset-password')
+  public async resetPassword (
+    @AuthUser() user: AuthUser,
+    @Body() payload: Pick<UserDTO, 'password'>): Promise<UpdateResult> {
+    return this.authService.resetPassword(user, payload);
+  }
 
 }

@@ -5,11 +5,12 @@ import { UserServiceImpl } from 'src/modules/user/services/user.service';
 import { AuthService } from './auth.service.abstract';
 import { EmailTamplate, MailServiceImpl } from 'src/modules/mail/services/mail.service';
 import { ConfigService } from '@nestjs/config';
+
 import type { IPayload } from '../interface/payload.interface';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-
 import type { UserDTO } from 'src/modules/user/dto/user.dto';
 import type { UserEntity } from 'src/modules/user/entities/user.entity';
+import type { AuthUser } from '../auth.decorator';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -67,10 +68,8 @@ export class AuthServiceImpl extends AuthService {
     await this.sendEmailTemplate(user, EmailTamplate.ForgotPassword);
   }
 
-  public override async resetPassword (token: string, userDto: Pick<UserDTO, 'password'>): Promise<UpdateResult> {
-    const secret = { secret: this.configService.get<string>('JWT_SECRET') };
-    const data = this.jwtService.verify(token, secret) as IPayload;
-    return this.userService.updateUserPassword(data.email, userDto.password);
+  public override async resetPassword (user: AuthUser, password: Pick<UserDTO, 'password'>): Promise<UpdateResult> {
+    return this.userService.updateUserPassword(user.email, password.password);
   }
 
   public override async loginJwt (userDto: Pick<UserDTO, 'password' | 'email'>): Promise<unknown> {
