@@ -9,7 +9,7 @@ import type { UserDTO } from 'src/modules/user/dto/user.dto';
 import type { UserEntity } from 'src/modules/user/entities/user.entity';
 
 @Controller('auth')
-export class AppController {
+export class AuthController {
 
   constructor( private readonly authService: AuthService) {}
 
@@ -30,7 +30,7 @@ export class AppController {
     return this.authService.singIn(userDto);
   }
 
-  @UseGuards(AuthorizationGuard)
+  @UseGuards(RegisterGuard)
   @Post('/recovery')
   public async forgotPassword (@Body() userDto: Pick<UserDTO, 'email'>): Promise<void> {
     return this.authService.forgotPassword(userDto);

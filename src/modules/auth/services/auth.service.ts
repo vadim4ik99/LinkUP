@@ -58,7 +58,7 @@ export class AuthServiceImpl extends AuthService {
   public override async verifyEmail (token: string): Promise<boolean> {
     const secret = { secret: this.configService.get<string>('JWT_SECRET') };
     const data = this.jwtService.verify(token, secret) as IPayload;
-    await this.userService.activateUser(data.email);
+    await this.userService.activateUser(data);
     return true;
   }
 
@@ -71,7 +71,7 @@ export class AuthServiceImpl extends AuthService {
   }
 
   public override async resetPassword (user: AuthUser, userDto: UserPasswordDTO): Promise<UpdateResult> {
-    return this.userService.updateUserPassword(user.email, userDto.password);
+    return this.userService.updateUserPassword(user, userDto);
   }
 
   public override async loginJwt (userDto: CreateUserResponseDto): Promise<unknown> {

@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { MailModule } from '../mail/mail.module';
 import { LocalStrategy } from './strategy/local.strategy';
+import { AuthController } from './controllers/auth.controller';
 
 const authService = { provide: AuthService, useClass: AuthServiceImpl };
 
@@ -26,6 +27,7 @@ const authService = { provide: AuthService, useClass: AuthServiceImpl };
       inject: [ConfigService],
     }),
   ],
+  controllers:[AuthController],
   providers: [authService, LocalStrategy, JwtStrategy],
 })
 
