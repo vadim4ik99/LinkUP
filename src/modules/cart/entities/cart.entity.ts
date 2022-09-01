@@ -1,5 +1,6 @@
 import { ProductEntity } from '../../product/entities/product.entity';
-import { Entity,
+import {
+  Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,

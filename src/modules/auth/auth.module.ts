@@ -27,7 +27,7 @@ const authService = { provide: AuthService, useClass: AuthServiceImpl };
       inject: [ConfigService],
     }),
   ],
-  controllers:[AuthController],
+  controllers: [AuthController],
   providers: [authService, LocalStrategy, JwtStrategy],
 })
 

@@ -16,12 +16,11 @@ export enum ImageType {
   PNG = 'png',
   SVG = 'svg+xml',
   TIFF = 'tiff',
-  WEBP = 'webp'
+  WEBP = 'webp',
 }
 
 @Entity()
 export class FileEntity {
-
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -45,5 +44,4 @@ export class FileEntity {
 
   @CreateDateColumn()
   public createdAt!: Date;
-
 }

@@ -6,12 +6,11 @@ import type { SentMessageInfo } from 'nodemailer';
 
 export enum EmailTamplate {
   Welcome = 'welcome',
-  ForgotPassword = 'password'
+  ForgotPassword = 'password',
 }
 
 @Injectable()
 export class MailServiceImpl extends MailService {
-
   constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
@@ -24,18 +23,17 @@ export class MailServiceImpl extends MailService {
     subject: string,
     page: EmailTamplate,
     token?: string,
-    password?: string): Promise<SentMessageInfo> {
-    return this.mailerService
-      .sendMail({
-        to: email,
-        from: this.configService.get('MAIL_FROM'),
-        subject,
-        template: __dirname + page,
-        context: {
-          token,
-          password,
-        },
-      });
+    password?: string,
+  ): Promise<SentMessageInfo> {
+    return this.mailerService.sendMail({
+      to: email,
+      from: this.configService.get('MAIL_FROM'),
+      subject,
+      template: __dirname + page,
+      context: {
+        token,
+        password,
+      },
+    });
   }
-
 }

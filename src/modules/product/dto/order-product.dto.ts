@@ -1,7 +1,6 @@
 import { IsInt, IsNotEmpty } from 'class-validator';
 
 export class OrderProductDTO {
-
   @IsInt()
   @IsNotEmpty()
   public id!: number;
@@ -17,5 +16,4 @@ export class OrderProductDTO {
 
   @IsInt()
   public quantity!: number;
-
 }

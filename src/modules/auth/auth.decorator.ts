@@ -4,8 +4,8 @@ import type { ExecutionContext } from '@nestjs/common';
 import type { Request } from 'express';
 
 export interface AuthUser {
-    email: string;
-    }
+  email: string;
+}
 
 export const AuthUser = createParamDecorator(
   (_data: unknown, ctx: ExecutionContext) => {

@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CartController } from './controllers/cart.controller';
 import { CartEntity } from './entities/cart.entity';
-import { CartRepository, cartRepositoryFactory } from './repositories/cart.repository';
+import {
+  CartRepository,
+  cartRepositoryFactory,
+} from './repositories/cart.repository';
 import { CartServiceImpl } from './services/cart.service';
 import { CartService } from './services/cart.service.abstract';
 

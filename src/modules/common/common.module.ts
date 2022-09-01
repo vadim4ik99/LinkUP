@@ -2,7 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommonController } from './controllers/common.controller';
 import { FileEntity } from './entities/images.entity';
-import { ImageRepository, imageRepositoryFactory } from './repositories/image.repository';
+import {
+  ImageRepository,
+  imageRepositoryFactory,
+} from './repositories/image.repository';
 import { CommonServiceImpl } from './services/common.service';
 import { CommonService } from './services/common.service.abstract';
 

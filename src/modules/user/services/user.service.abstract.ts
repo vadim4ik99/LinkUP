@@ -9,10 +9,15 @@ export abstract class UserService {
 
   public abstract findUser(userDto: UserEmailDTO): Promise<UserEntity | null>;
 
-  public abstract createUser(userDto: CreateUserResponseDto): Promise<UserEntity>;
+  public abstract createUser(
+    userDto: CreateUserResponseDto,
+  ): Promise<UserEntity>;
 
   public abstract activateUser(userDto: UserEmailDTO): Promise<UpdateResult>;
 
-  public abstract updateUserPassword(user: AuthUser, userDto: UserPasswordDTO): Promise<UpdateResult>;
+  public abstract updateUserPassword(
+    user: AuthUser,
+    userDto: UserPasswordDTO,
+  ): Promise<UpdateResult>;
 
 }

@@ -13,11 +13,12 @@ export class AuthorizationGuard implements CanActivate {
 
   public canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const { access_token } = request.body as IJwttoken ;
+    const { access_token } = request.body as IJwttoken;
     const payload = this.jwtService.verify(access_token) as IPayload;
-    if (!payload) {return true;}
+    if (!payload) {
+      return true;
+    }
     return false;
   }
 
 }
-

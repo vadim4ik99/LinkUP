@@ -10,7 +10,7 @@ const mailService = { provide: MailService, useClass: MailServiceImpl };
 @Module({
   imports: [
     MailerModule.forRootAsync({
-      imports:[ConfigModule],
+      imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         transport: configService.get('MAIL_TRANSPORTER') as string,
         defaults: {

@@ -15,7 +15,6 @@ import {
 
 @Entity()
 export class ProductEntity {
-
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -47,7 +46,7 @@ export class ProductEntity {
   public orderProducts!: OrderProductEntity[];
 
   @ManyToOne(() => FileEntity, (image) => image.products)
-  public image!:FileEntity;
+  public image!: FileEntity;
 
   @RelationId((product: ProductEntity) => product.image)
   public imageId!: number;
@@ -57,5 +56,4 @@ export class ProductEntity {
 
   @UpdateDateColumn()
   public updatedAt!: Date;
-
 }

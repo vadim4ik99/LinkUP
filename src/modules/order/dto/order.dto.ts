@@ -2,7 +2,6 @@ import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
 import { OrderStatus } from '../entities/order.entity';
 
 export class OrderDTO {
-
   @IsInt()
   @IsNotEmpty()
   public id!: number;
@@ -15,6 +14,4 @@ export class OrderDTO {
 
   @IsEnum(OrderStatus)
   public status!: OrderStatus;
-
 }
-

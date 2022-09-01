@@ -1,3 +1,1 @@
-export abstract class CommonService {
-
-}
+export abstract class CommonService {}

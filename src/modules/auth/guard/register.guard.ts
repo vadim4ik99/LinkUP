@@ -8,7 +8,9 @@ export class RegisterGuard implements CanActivate {
 
   public canActivate(context: ExecutionContext): boolean | Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    if(request.isUnauthenticated()) { return true;}
+    if (request.isUnauthenticated()) {
+      return true;
+    }
     return false;
   }
 

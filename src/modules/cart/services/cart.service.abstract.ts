@@ -1,3 +1,1 @@
-export abstract class CartService {
-
-}
+export abstract class CartService {}

@@ -8,8 +8,14 @@ import {
   CategoryProductRepository,
   categoryProductRepositoryFactory,
 } from './repositories/category-product.repository';
-import { OrderProductRepository, orderProductRepositoryFactory } from './repositories/order-product.repository';
-import { ProductRepository, productRepositoryFactory } from './repositories/product.repository';
+import {
+  OrderProductRepository,
+  orderProductRepositoryFactory,
+} from './repositories/order-product.repository';
+import {
+  ProductRepository,
+  productRepositoryFactory,
+} from './repositories/product.repository';
 import { ProductServiceImpl } from './services/product.service';
 import { ProductService } from './services/product.service.abstract';
 
@@ -31,11 +37,25 @@ const orderProductRepository = {
   useFactory: orderProductRepositoryFactory,
 };
 
-const productService = { provide: ProductService, useClass: ProductServiceImpl };
+const productService = {
+  provide: ProductService,
+  useClass: ProductServiceImpl,
+};
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductEntity, CategoryProductEntity, OrderProductEntity])],
+  imports: [
+    TypeOrmModule.forFeature([
+      ProductEntity,
+      CategoryProductEntity,
+      OrderProductEntity,
+    ]),
+  ],
   controllers: [ProductController],
-  providers: [productService, productRepository, categoryProductRepository, orderProductRepository ],
+  providers: [
+    productService,
+    productRepository,
+    categoryProductRepository,
+    orderProductRepository,
+  ],
 })
 export class ProductModule {}

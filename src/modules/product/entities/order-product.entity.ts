@@ -1,10 +1,16 @@
 import { OrderEntity } from '../../order/entities/order.entity';
 import { ProductEntity } from './product.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, RelationId } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+  RelationId,
+} from 'typeorm';
 
 @Entity()
 export class OrderProductEntity {
-
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -28,5 +34,4 @@ export class OrderProductEntity {
 
   @CreateDateColumn()
   public createdAt!: Date;
-
 }

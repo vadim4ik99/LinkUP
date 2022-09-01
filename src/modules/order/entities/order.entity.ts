@@ -15,12 +15,11 @@ export enum OrderStatus {
   PAID = 'paid',
   PACKING = 'packing',
   SHIPPING = 'shipping',
-  DELIVERED = 'deliverd'
+  DELIVERED = 'deliverd',
 }
 
 @Entity()
 export class OrderEntity {
-
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -41,5 +40,4 @@ export class OrderEntity {
 
   @UpdateDateColumn()
   public updatedAt!: Date;
-
 }

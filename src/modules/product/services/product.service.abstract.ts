@@ -1,3 +1,1 @@
-export abstract class ProductService {
-
-}
+export abstract class ProductService {}
