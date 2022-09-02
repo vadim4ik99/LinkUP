@@ -50,7 +50,6 @@ export class AuthController {
     @AuthUser() user: AuthUser,
     @Body() payload: UserPasswordDTO,
   ): Promise<UpdateResult> {
-    console.log(user);
     return this.authService.resetPassword(user, payload);
   }
 

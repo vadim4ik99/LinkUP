@@ -64,8 +64,7 @@ export class AuthServiceImpl extends AuthService {
     tamplate: EmailTamplate,
   ): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
-    const token = await this.jwtService.signAsync(userDto, expiresIn);
-    console.log(token);
+    await this.jwtService.signAsync(userDto, expiresIn);
     tamplate;
     /*
     await this.mailService.sendEmail(
@@ -103,9 +102,8 @@ export class AuthServiceImpl extends AuthService {
   public override async loginJwt(
     userDto: CreateUserResponseDto,
   ): Promise<unknown> {
-    const payload = { username: userDto.email, password: userDto.password };
+    const payload = { email: userDto.email, password: userDto.password };
     const token = await this.jwtService.signAsync(payload);
-    console.log(token);
     return token;
   }
 
