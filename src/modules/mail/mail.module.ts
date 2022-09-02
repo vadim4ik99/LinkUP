@@ -12,7 +12,15 @@ const mailService = { provide: MailService, useClass: MailServiceImpl };
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        transport: configService.get('MAIL_TRANSPORTER') as string,
+        transport: {
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false,
+          auth: {
+            user: configService.get('MAIL_USER') as string,
+            pass: configService.get('MAIL_PASS') as string,
+          },
+        },
         defaults: {
           from: configService.get('MAIL_FROM') as string,
         },

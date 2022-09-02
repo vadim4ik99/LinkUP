@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserService } from './user.service.abstract';
@@ -7,8 +8,8 @@ import type { UserEntity } from '../entities/user.entity';
 import { Repository, type UpdateResult } from 'typeorm';
 import type { UserEmailDTO } from '../dto/user-email.dto';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
-import type { AuthUser } from 'src/modules/auth/auth.decorator';
-import type { UserPasswordDTO } from '../dto/user-email.dto copy';
+import type { AuthUser } from '../../auth/auth.decorator';
+import type { UserPasswordDTO } from '../dto/user-password.dto';
 
 @Injectable()
 export class UserServiceImpl extends UserService {
@@ -24,13 +25,14 @@ export class UserServiceImpl extends UserService {
     userDto: UserEmailDTO,
   ): Promise<UserEntity | null> {
     const email = userDto.email;
-    return await this._usersRepository.findOneBy({ email });
+    const user = await this._usersRepository.findOneBy({ email });
+    return user;
   }
 
   public override async createUser(
     userDto: CreateUserResponseDto,
   ): Promise<UserEntity> {
-    const checkUser = this.findUser(userDto);
+    const checkUser = await this.findUser(userDto);
     if (checkUser != null) {
       throw new BadRequestException('User already exist');
     }

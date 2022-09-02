@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   Injectable,
   NotFoundException,
@@ -5,19 +6,19 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { UserService } from 'src/modules/user/services/user.service.abstract';
-import { MailService } from 'src/modules/mail/services/mail.service.abstract';
+import { UserService } from '../../user/services/user.service.abstract';
+//import { MailService } from '../../mail/services/mail.service.abstract';
 import { AuthService } from './auth.service.abstract';
-import { EmailTamplate } from 'src/modules/mail/services/mail.service';
+import { EmailTamplate } from '../../mail/services/mail.service';
 import { ConfigService } from '@nestjs/config';
 
 import type { IPayload } from '../interface/payload.interface';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-import type { UserEntity } from 'src/modules/user/entities/user.entity';
+import type { UserEntity } from '../../user/entities/user.entity';
 import type { AuthUser } from '../auth.decorator';
-import type { CreateUserResponseDto } from 'src/modules/user/dto/create-user-response.dto';
-import type { UserEmailDTO } from 'src/modules/user/dto/user-email.dto';
-import type { UserPasswordDTO } from 'src/modules/user/dto/user-email.dto copy';
+import type { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
+import type { UserEmailDTO } from '../../user/dto/user-email.dto';
+import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
 
 @Injectable()
 export class AuthServiceImpl extends AuthService {
@@ -25,7 +26,7 @@ export class AuthServiceImpl extends AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
-    private readonly mailService: MailService,
+    //private readonly mailService: MailService,
     private readonly configService: ConfigService,
   ) {
     super();
@@ -64,12 +65,15 @@ export class AuthServiceImpl extends AuthService {
   ): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
     const token = await this.jwtService.signAsync(userDto, expiresIn);
+    console.log(token);
+    tamplate;
+    /*
     await this.mailService.sendEmail(
       userDto.email,
       'Welcome to site',
       tamplate,
       token,
-    );
+    );*/
   }
 
   public override async verifyEmail(token: string): Promise<boolean> {
@@ -80,7 +84,7 @@ export class AuthServiceImpl extends AuthService {
   }
 
   public override async forgotPassword(
-    userDto: CreateUserResponseDto,
+    userDto: UserEmailDTO,
   ): Promise<void> {
     const user = await this.userService.findUser(userDto);
     if (!user) {
@@ -100,7 +104,9 @@ export class AuthServiceImpl extends AuthService {
     userDto: CreateUserResponseDto,
   ): Promise<unknown> {
     const payload = { username: userDto.email, password: userDto.password };
-    return { access_token: await this.jwtService.signAsync(payload) };
+    const token = await this.jwtService.signAsync(payload);
+    console.log(token);
+    return token;
   }
 
 }

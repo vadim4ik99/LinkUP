@@ -21,6 +21,7 @@ export enum ImageType {
 
 @Entity()
 export class FileEntity {
+
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -44,4 +45,5 @@ export class FileEntity {
 
   @CreateDateColumn()
   public createdAt!: Date;
+
 }

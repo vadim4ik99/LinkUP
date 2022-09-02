@@ -1,6 +1,7 @@
 import { IsEmail, IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class UserDTO {
+
   @IsInt()
   @IsNotEmpty()
   public id!: number;
@@ -23,4 +24,5 @@ export class UserDTO {
 
   @IsInt()
   public avatar!: number;
+
 }

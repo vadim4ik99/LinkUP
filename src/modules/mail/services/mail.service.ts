@@ -3,6 +3,7 @@ import { MailService } from './mail.service.abstract';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import type { SentMessageInfo } from 'nodemailer';
+import path from 'path';
 
 export enum EmailTamplate {
   Welcome = 'welcome',
@@ -11,6 +12,7 @@ export enum EmailTamplate {
 
 @Injectable()
 export class MailServiceImpl extends MailService {
+
   constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
@@ -29,11 +31,12 @@ export class MailServiceImpl extends MailService {
       to: email,
       from: this.configService.get('MAIL_FROM'),
       subject,
-      template: __dirname + page,
+      template: path.join(__dirname, '..', 'templates', page),
       context: {
         token,
         password,
       },
     });
   }
+
 }

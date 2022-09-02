@@ -22,7 +22,7 @@ const authService = { provide: AuthService, useClass: AuthServiceImpl };
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '120' },
+        signOptions: { expiresIn: '1d' },
       }),
       inject: [ConfigService],
     }),

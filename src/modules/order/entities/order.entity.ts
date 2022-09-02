@@ -20,6 +20,7 @@ export enum OrderStatus {
 
 @Entity()
 export class OrderEntity {
+
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -40,4 +41,5 @@ export class OrderEntity {
 
   @UpdateDateColumn()
   public updatedAt!: Date;
+
 }

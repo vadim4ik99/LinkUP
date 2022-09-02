@@ -11,6 +11,7 @@ import {
 
 @Entity()
 export class OrderProductEntity {
+
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -34,4 +35,5 @@ export class OrderProductEntity {
 
   @CreateDateColumn()
   public createdAt!: Date;
+
 }

@@ -15,6 +15,7 @@ import {
 
 @Entity()
 export class ProductEntity {
+
   @PrimaryGeneratedColumn()
   public id!: number;
 
@@ -56,4 +57,5 @@ export class ProductEntity {
 
   @UpdateDateColumn()
   public updatedAt!: Date;
+
 }

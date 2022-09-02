@@ -1,33 +1,36 @@
-import type { EmailTamplate } from 'src/modules/mail/services/mail.service';
-import type { UserDTO } from 'src/modules/user/dto/user.dto';
-import type { UserEntity } from 'src/modules/user/entities/user.entity';
+import type { EmailTamplate } from '../../mail/services/mail.service';
+import type { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
+import type { UserDTO } from '../../user/dto/user.dto';
+import type { UserEntity } from '../../user/entities/user.entity';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import type { AuthUser } from '../auth.decorator';
+import type { UserEmailDTO } from '../../user/dto/user-email.dto';
+import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
 
 export abstract class AuthService {
 
   public abstract singIn(
-    userDto: Pick<UserDTO, 'email' | 'password'>,
+    userDto: CreateUserResponseDto,
   ): Promise<UserEntity>;
 
   public abstract singUp(
-    userDto: Pick<UserDTO, 'email' | 'password'>,
+    userDto: CreateUserResponseDto,
   ): Promise<boolean>;
 
   public abstract sendEmailTemplate(
-    user: Pick<UserDTO, 'email'>,
+    user: UserEmailDTO,
     tamplate: EmailTamplate,
   ): Promise<void>;
 
   public abstract verifyEmail(token: string): Promise<boolean>;
 
   public abstract forgotPassword(
-    userDto: Pick<UserDTO, 'email'>,
+    userDto: UserEmailDTO,
   ): Promise<void>;
 
   public abstract resetPassword(
     user: AuthUser,
-    password: Pick<UserDTO, 'password'>,
+    password: UserPasswordDTO,
   ): Promise<UpdateResult>;
 
   public abstract loginJwt(

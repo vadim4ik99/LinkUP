@@ -18,14 +18,14 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column()
-  public firstName!: string;
+  @Column({ nullable: true })
+  public firstName?: string;
 
-  @Column()
-  public lastName!: string;
+  @Column({ nullable: true })
+  public lastName?: string;
 
-  @Column()
-  public verify!: boolean;
+  @Column({ default: false })
+  public verify?: boolean;
 
   @Column()
   public email!: string;
@@ -34,16 +34,16 @@ export class UserEntity {
   public password!: string;
 
   @OneToMany(() => CartEntity, (cart) => cart.user)
-  public carts!: CartEntity[];
+  public carts?: CartEntity[];
 
   @ManyToOne(() => FileEntity, (avatar) => avatar.users)
-  public avatar!: FileEntity;
+  public avatar?: FileEntity;
 
   @RelationId((user: UserEntity) => user.avatar)
-  public avatarId!: number;
+  public avatarId?: number;
 
   @OneToMany(() => OrderEntity, (order) => order.user)
-  public orders!: OrderEntity[];
+  public orders?: OrderEntity[];
 
   @CreateDateColumn()
   public createdAt!: Date;

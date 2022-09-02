@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service.abstract';
 import { RegisterGuard } from '../guard/register.guard';
@@ -5,8 +6,10 @@ import { AuthorizationGuard } from '../guard/authorization.guard';
 import { AuthUser } from '../auth.decorator';
 
 import type { UpdateResult } from 'typeorm';
-import type { UserDTO } from 'src/modules/user/dto/user.dto';
-import type { UserEntity } from 'src/modules/user/entities/user.entity';
+import type { UserEntity } from '../../user/entities/user.entity';
+import { UserPasswordDTO } from '../../user/dto/user-password.dto';
+import { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
+import { UserEmailDTO } from '../../user/dto/user-email.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,13 +18,12 @@ export class AuthController {
 
   @Post('/signup')
   public async signUp(
-    @Body() userDto: Pick<UserDTO, 'email' | 'password'>,
+    @Body() userDto: CreateUserResponseDto,
   ): Promise<boolean> {
     return this.authService.singUp(userDto);
   }
 
-  @UseGuards(RegisterGuard)
-  @Get('/email/confirm')
+  @Get('/email/confirm/:token')
   public async verifyEmail(@Param('token') token: string): Promise<boolean> {
     return this.authService.verifyEmail(token);
   }
@@ -29,7 +31,7 @@ export class AuthController {
   @UseGuards(RegisterGuard)
   @Post('/login')
   public async signIn(
-    @Body() userDto: Pick<UserDTO, 'email' | 'password'>,
+    @Body() userDto: CreateUserResponseDto,
   ): Promise<UserEntity> {
     return this.authService.singIn(userDto);
   }
@@ -37,7 +39,7 @@ export class AuthController {
   @UseGuards(RegisterGuard)
   @Post('/recovery')
   public async forgotPassword(
-    @Body() userDto: Pick<UserDTO, 'email'>,
+    @Body() userDto: UserEmailDTO,
   ): Promise<void> {
     return this.authService.forgotPassword(userDto);
   }
@@ -46,8 +48,9 @@ export class AuthController {
   @Post('/reset-password')
   public async resetPassword(
     @AuthUser() user: AuthUser,
-    @Body() payload: Pick<UserDTO, 'password'>,
+    @Body() payload: UserPasswordDTO,
   ): Promise<UpdateResult> {
+    console.log(user);
     return this.authService.resetPassword(user, payload);
   }
 
