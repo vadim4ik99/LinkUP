@@ -1,4 +1,4 @@
-import type { IAuthUser } from 'src/modules/auth/auth.decorator';
+import type { IAuthUser } from 'src/modules/auth/decorators/auth.decorator';
 import type { UpdateResult } from 'typeorm';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
 import type { UserEmailDTO } from '../dto/user-email.dto';

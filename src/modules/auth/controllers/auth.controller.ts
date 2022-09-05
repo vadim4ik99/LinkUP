@@ -3,45 +3,45 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service.abstract';
 import { RegisterGuard } from '../guard/register.guard';
 import { JwtGuard } from '../guard/jwt.guard';
-import { AuthUser, IAuthUser } from '../auth.decorator';
+import { AuthUser, IAuthUser } from '../decorators/auth.decorator';
 import { UserPasswordDTO } from '../../user/dto/user-password.dto';
 import { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import { UserEmailDTO } from '../../user/dto/user-email.dto';
-import { AuthController } from './auth.controller.abstract';
+import { AuthControllerAbs } from './auth.controller.abstract';
 
 import type { UpdateResult } from 'typeorm';
-import type { UserEntity } from '../../user/entities/user.entity';
+import type { UserLoginDto } from 'src/modules/user/dto/user-login.dto';
 
 @Controller('auth')
-export class AuthControllerImp extends AuthController {
+export class AuthController extends AuthControllerAbs {
 
   constructor(private readonly _authService: AuthService) {
     super();
   }
 
   @Post('/signup')
-  public async signUp(
+  public override async signUp(
     @Body() userDto: CreateUserResponseDto,
   ): Promise<boolean> {
     return this._authService.singUp(userDto);
   }
 
   @Get('/email/confirm/:token')
-  public async verifyEmail(@Param('token') token: string): Promise<boolean> {
+  public override async verifyEmail(@Param('token') token: string): Promise<boolean> {
     return this._authService.verifyEmail(token);
   }
 
   @UseGuards(RegisterGuard)
   @Post('/login')
-  public async signIn(
+  public override async signIn(
     @Body() userDto: CreateUserResponseDto,
-  ): Promise<UserEntity> {
+  ): Promise<UserLoginDto> {
     return this._authService.singIn(userDto);
   }
 
   @UseGuards(RegisterGuard)
   @Post('/recovery')
-  public async forgotPassword(
+  public override async forgotPassword(
     @Body() userDto: UserEmailDTO,
   ): Promise<void> {
     return this._authService.forgotPassword(userDto);
@@ -49,7 +49,7 @@ export class AuthControllerImp extends AuthController {
 
   @UseGuards(JwtGuard)
   @Post('/reset-password')
-  public async resetPassword(
+  public override async resetPassword(
     @AuthUser() user: IAuthUser,
     @Body() payload: UserPasswordDTO,
   ): Promise<UpdateResult> {

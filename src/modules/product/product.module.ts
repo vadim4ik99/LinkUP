@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { ProductControllerImp } from './controllers/product.controller';
-import { ProductController } from './controllers/product.controller.abstract';
+import { ProductController } from './controllers/product.controller';
 import { CategoryProductEntity } from './entities/category-product.entity';
 import { OrderProductEntity } from './entities/order-product.entity';
 import { ProductEntity } from './entities/product.entity';
@@ -44,11 +43,6 @@ const productService = {
   useClass: ProductServiceImpl,
 };
 
-const productController = {
-  provide: ProductController,
-  useClass: ProductControllerImp,
-};
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -57,7 +51,7 @@ const productController = {
       OrderProductEntity,
     ]),
   ],
-  controllers: [productController],
+  controllers: [ProductController],
   providers: [
     productService,
     productRepository,

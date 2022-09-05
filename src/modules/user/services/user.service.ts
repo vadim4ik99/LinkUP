@@ -8,7 +8,7 @@ import type { UserEntity } from '../entities/user.entity';
 import { Repository, type UpdateResult } from 'typeorm';
 import type { UserEmailDTO } from '../dto/user-email.dto';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
-import type { IAuthUser } from '../../auth/auth.decorator';
+import type { IAuthUser } from '../../auth/decorators/auth.decorator';
 import type { UserPasswordDTO } from '../dto/user-password.dto';
 
 @Injectable()

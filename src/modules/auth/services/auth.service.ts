@@ -11,11 +11,12 @@ import { MailService } from '../../mail/services/mail.service.abstract';
 import { AuthService } from './auth.service.abstract';
 import { EmailTamplate } from '../../mail/services/mail.service';
 import { ConfigService } from '@nestjs/config';
+import { plainToClass } from 'class-transformer';
+import { UserLoginDto } from '../../user/dto/user-login.dto';
 
 import type { IPayload } from '../interface/payload.interface';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-import type { UserEntity } from '../../user/entities/user.entity';
-import type { IAuthUser } from '../auth.decorator';
+import type { IAuthUser } from '../decorators/auth.decorator';
 import type { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import type { UserEmailDTO } from '../../user/dto/user-email.dto';
 import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
@@ -34,7 +35,7 @@ export class AuthServiceImpl extends AuthService {
 
   public override async singIn(
     userDto: CreateUserResponseDto,
-  ): Promise<UserEntity> {
+  ): Promise<UserLoginDto> {
     const password = userDto.password;
     const user = await this._userService.findUser(userDto);
     if (!user) {
@@ -48,7 +49,8 @@ export class AuthServiceImpl extends AuthService {
       throw new UnauthorizedException('You not activated account');
     }
     await this.loginJwt(user);
-    return user;
+    const userLoginDto = plainToClass(UserLoginDto, user);
+    return userLoginDto;
   }
 
   public override async singUp(

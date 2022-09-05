@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ProductDTO } from '../dto/product.dto';
 import { ProductService } from '../services/product.service.abstract';
-import { ProductController } from './product.controller.abstract';
+import { ProductControllerAbs } from './product.controller.abstract';
 import { ProductUpdateDto } from '../dto/productUpdate.dto';
+import { AuthUser, IAuthUser } from '../../auth/decorators/auth.decorator';
 
 import type { UpdateResult, DeleteResult } from 'typeorm';
 import type { ProductEntity } from '../entities/product.entity';
-import { AuthUser, IAuthUser } from 'src/modules/auth/auth.decorator';
 
 @Controller('product')
-export class ProductControllerImp extends ProductController {
+export class ProductController extends ProductControllerAbs {
 
   constructor(private readonly _productServise: ProductService) {
     super();

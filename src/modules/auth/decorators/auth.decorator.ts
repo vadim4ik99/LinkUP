@@ -2,7 +2,7 @@ import { createParamDecorator } from '@nestjs/common';
 
 import type { ExecutionContext } from '@nestjs/common';
 import type { Request } from 'express';
-import type { RoleEnum } from './role.enum';
+import type { RoleEnum } from '../role.enum';
 
 export interface IAuthUser {
   email: string;
