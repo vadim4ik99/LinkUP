@@ -1,13 +1,14 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: ['.env', '.env.example'],
+      isGlobal: true,
+      cache: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -18,13 +19,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [],
+        entities: [__dirname + '/**/*.{entity,view}.{ts,js}'],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [Logger],
 })
 export class AppModule {}
