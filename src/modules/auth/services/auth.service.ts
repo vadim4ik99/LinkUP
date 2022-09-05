@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
 import { UserService } from '../../user/services/user.service.abstract';
-//import { MailService } from '../../mail/services/mail.service.abstract';
+import { MailService } from '../../mail/services/mail.service.abstract';
 import { AuthService } from './auth.service.abstract';
 import { EmailTamplate } from '../../mail/services/mail.service';
 import { ConfigService } from '@nestjs/config';
@@ -15,7 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import type { IPayload } from '../interface/payload.interface';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import type { UserEntity } from '../../user/entities/user.entity';
-import type { AuthUser } from '../auth.decorator';
+import type { IAuthUser } from '../auth.decorator';
 import type { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import type { UserEmailDTO } from '../../user/dto/user-email.dto';
 import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
@@ -24,10 +24,10 @@ import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
 export class AuthServiceImpl extends AuthService {
 
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly userService: UserService,
-    //private readonly mailService: MailService,
-    private readonly configService: ConfigService,
+    private readonly _jwtService: JwtService,
+    private readonly _userService: UserService,
+    private readonly _mailService: MailService,
+    private readonly _configService: ConfigService,
   ) {
     super();
   }
@@ -36,7 +36,7 @@ export class AuthServiceImpl extends AuthService {
     userDto: CreateUserResponseDto,
   ): Promise<UserEntity> {
     const password = userDto.password;
-    const user = await this.userService.findUser(userDto);
+    const user = await this._userService.findUser(userDto);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
@@ -54,7 +54,7 @@ export class AuthServiceImpl extends AuthService {
   public override async singUp(
     userDto: CreateUserResponseDto,
   ): Promise<boolean> {
-    const user = await this.userService.createUser(userDto);
+    const user = await this._userService.createUser(userDto);
     await this.sendEmailTemplate(user, EmailTamplate.Welcome);
     return true;
   }
@@ -64,28 +64,26 @@ export class AuthServiceImpl extends AuthService {
     tamplate: EmailTamplate,
   ): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
-    await this.jwtService.signAsync(userDto, expiresIn);
-    tamplate;
-    /*
-    await this.mailService.sendEmail(
+    const token = await this._jwtService.signAsync(userDto, expiresIn);
+    await this._mailService.sendEmail(
       userDto.email,
       'Welcome to site',
       tamplate,
       token,
-    );*/
+    );
   }
 
   public override async verifyEmail(token: string): Promise<boolean> {
-    const secret = { secret: this.configService.get<string>('JWT_SECRET') };
-    const data = this.jwtService.verify(token, secret) as IPayload;
-    await this.userService.activateUser(data);
+    const secret = { secret: this._configService.get<string>('JWT_SECRET') };
+    const data = this._jwtService.verify(token, secret) as IPayload;
+    await this._userService.activateUser(data);
     return true;
   }
 
   public override async forgotPassword(
     userDto: UserEmailDTO,
   ): Promise<void> {
-    const user = await this.userService.findUser(userDto);
+    const user = await this._userService.findUser(userDto);
     if (!user) {
       throw new NotFoundException('Wrong email');
     }
@@ -93,17 +91,17 @@ export class AuthServiceImpl extends AuthService {
   }
 
   public override async resetPassword(
-    user: AuthUser,
+    user: IAuthUser,
     userDto: UserPasswordDTO,
   ): Promise<UpdateResult> {
-    return this.userService.updateUserPassword(user, userDto);
+    return this._userService.updateUserPassword(user, userDto);
   }
 
   public override async loginJwt(
     userDto: CreateUserResponseDto,
   ): Promise<unknown> {
     const payload = { email: userDto.email, password: userDto.password };
-    const token = await this.jwtService.signAsync(payload);
+    const token = await this._jwtService.signAsync(payload);
     return token;
   }
 

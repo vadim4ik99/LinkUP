@@ -3,7 +3,7 @@ import type { CreateUserResponseDto } from '../../user/dto/create-user-response.
 import type { UserDTO } from '../../user/dto/user.dto';
 import type { UserEntity } from '../../user/entities/user.entity';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-import type { AuthUser } from '../auth.decorator';
+import type { IAuthUser } from '../auth.decorator';
 import type { UserEmailDTO } from '../../user/dto/user-email.dto';
 import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
 
@@ -29,7 +29,7 @@ export abstract class AuthService {
   ): Promise<void>;
 
   public abstract resetPassword(
-    user: AuthUser,
+    user: IAuthUser,
     password: UserPasswordDTO,
   ): Promise<UpdateResult>;
 

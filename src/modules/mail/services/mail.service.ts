@@ -2,8 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { MailService } from './mail.service.abstract';
 import { MailerService } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
-import type { SentMessageInfo } from 'nodemailer';
 import path from 'path';
+
+import type { SentMessageInfo } from 'nodemailer';
+
 
 export enum EmailTamplate {
   Welcome = 'welcome',

@@ -1,4 +1,4 @@
-import type { AuthUser } from 'src/modules/auth/auth.decorator';
+import type { IAuthUser } from 'src/modules/auth/auth.decorator';
 import type { UpdateResult } from 'typeorm';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
 import type { UserEmailDTO } from '../dto/user-email.dto';
@@ -16,7 +16,7 @@ export abstract class UserService {
   public abstract activateUser(userDto: UserEmailDTO): Promise<UpdateResult>;
 
   public abstract updateUserPassword(
-    user: AuthUser,
+    user: IAuthUser,
     userDto: UserPasswordDTO,
   ): Promise<UpdateResult>;
 

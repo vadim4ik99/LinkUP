@@ -8,9 +8,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { MailModule } from '../mail/mail.module';
 import { LocalStrategy } from './strategy/local.strategy';
-import { AuthController } from './controllers/auth.controller';
+import { AuthControllerImp } from './controllers/auth.controller';
+import { AuthController } from './controllers/auth.controller.abstract';
 
 const authService = { provide: AuthService, useClass: AuthServiceImpl };
+const authController = { provide: AuthController, useClass: AuthControllerImp };
 
 @Module({
   imports: [
@@ -27,7 +29,7 @@ const authService = { provide: AuthService, useClass: AuthServiceImpl };
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
+  controllers: [authController],
   providers: [authService, LocalStrategy, JwtStrategy],
 })
 

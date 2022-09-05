@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductController } from './controllers/product.controller';
+import { DataSource } from 'typeorm';
+import { ProductControllerImp } from './controllers/product.controller';
+import { ProductController } from './controllers/product.controller.abstract';
 import { CategoryProductEntity } from './entities/category-product.entity';
 import { OrderProductEntity } from './entities/order-product.entity';
 import { ProductEntity } from './entities/product.entity';
@@ -21,25 +23,30 @@ import { ProductService } from './services/product.service.abstract';
 
 const productRepository = {
   provide: ProductRepository,
-  inject: ['DATA_SOURCE'],
+  inject: [DataSource],
   useFactory: productRepositoryFactory,
 };
 
 const categoryProductRepository = {
   provide: CategoryProductRepository,
-  inject: ['DATA_SOURCE'],
+  inject: [DataSource],
   useFactory: categoryProductRepositoryFactory,
 };
 
 const orderProductRepository = {
   provide: OrderProductRepository,
-  inject: ['DATA_SOURCE'],
+  inject: [DataSource],
   useFactory: orderProductRepositoryFactory,
 };
 
 const productService = {
   provide: ProductService,
   useClass: ProductServiceImpl,
+};
+
+const productController = {
+  provide: ProductController,
+  useClass: ProductControllerImp,
 };
 
 @Module({
@@ -50,7 +57,7 @@ const productService = {
       OrderProductEntity,
     ]),
   ],
-  controllers: [ProductController],
+  controllers: [productController],
   providers: [
     productService,
     productRepository,
