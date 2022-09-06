@@ -11,7 +11,11 @@ import {
   ManyToOne,
   RelationId,
 } from 'typeorm';
-import { UserType } from '../../auth/decorators/authorization.decorator';
+
+export enum UserTypeEnum {
+  Vendor = 'vendor',
+  Costumer = 'costumer'
+}
 
 @Entity()
 export class UserEntity {
@@ -36,10 +40,11 @@ export class UserEntity {
 
   @Column({
     type: 'enum',
-    enum: ['costumer', 'vendor'],
-    default: 'costumer',
+    name: 'roles',
+    enum: UserTypeEnum,
+    default: UserTypeEnum.Costumer,
   })
-  public role!: UserType;
+  public role!: UserTypeEnum;
 
   @OneToMany(() => CartEntity, (cart) => cart.user)
   public carts?: CartEntity[];

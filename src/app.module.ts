@@ -22,7 +22,7 @@ import { ProductModule } from './modules/product/product.module';
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.{entity,view}.{ts,js}'],
         migrations : [__dirname + '/migrations/*.{ts,js}'],
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),

@@ -40,6 +40,7 @@ export class UserServiceImpl extends UserService {
     const newUser = {
       email: userDto.email,
       password: await hash(userDto.password, salt),
+      role: userDto.role,
     };
     return this._usersRepository.save(newUser);
   }

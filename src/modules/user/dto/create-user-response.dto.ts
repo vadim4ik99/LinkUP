@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import type { UserTypeEnum } from '../entities/user.entity';
 
 export class CreateUserResponseDto {
 
@@ -9,5 +10,8 @@ export class CreateUserResponseDto {
   @IsString()
   @IsNotEmpty()
   public password!: string;
+
+  //@isEnum(UserTypeEnum) ---> Why it`s not work
+  public role!: UserTypeEnum;
 
 }

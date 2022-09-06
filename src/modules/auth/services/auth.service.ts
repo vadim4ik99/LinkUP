@@ -67,6 +67,7 @@ export class AuthServiceImpl extends AuthService {
   ): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
     const token = await this._jwtService.signAsync(userDto, expiresIn);
+    console.log('email token', token);
     await this._mailService.sendEmail(
       userDto.email,
       'Welcome to site',
@@ -104,7 +105,7 @@ export class AuthServiceImpl extends AuthService {
   ): Promise<unknown> {
     const payload = { email: userDto.email, password: userDto.password };
     const token = await this._jwtService.signAsync(payload);
-    console.log(token);
+    console.log('login token', token);
     return token;
   }
 
