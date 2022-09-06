@@ -7,6 +7,7 @@ import { AuthUser, IAuthUser } from '../../auth/decorators/auth.decorator';
 
 import type { UpdateResult, DeleteResult } from 'typeorm';
 import type { ProductEntity } from '../entities/product.entity';
+import { Authorization } from 'src/modules/auth/decorators/authorization.decorator';
 
 @Controller('product')
 export class ProductController extends ProductControllerAbs {
@@ -15,6 +16,7 @@ export class ProductController extends ProductControllerAbs {
     super();
   }
 
+  @Authorization(['vendor'])
   @Post('/add')
   public override async createProduct(@AuthUser() _user: IAuthUser, createProductDto: ProductDTO,
   ): Promise<ProductEntity> {

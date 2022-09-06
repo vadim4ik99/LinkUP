@@ -2,10 +2,6 @@ import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class ProductDTO {
 
-  @IsInt()
-  @IsNotEmpty()
-  public id!: number;
-
   @IsString()
   @IsNotEmpty()
   public title!: string;
@@ -28,9 +24,9 @@ export class ProductDTO {
   public quantity!: number;
 
   @IsInt()
-  public categoriesId!: number;
+  public categoriesId?: number;
 
   @IsInt()
-  public imgId!: number;
+  public imgId?: number;
 
 }

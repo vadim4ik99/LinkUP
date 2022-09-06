@@ -1,7 +1,8 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
+import { ProductModule } from './modules/product/product.module';
 
 @Module({
   imports: [
@@ -20,13 +21,15 @@ import { AuthModule } from './modules/auth/auth.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.{entity,view}.{ts,js}'],
+        migrations : [__dirname + '/migrations/*.{ts,js}'],
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
     AuthModule,
+    ProductModule,
   ],
   controllers: [],
-  providers: [Logger],
+  providers: [],
 })
 export class AppModule {}
