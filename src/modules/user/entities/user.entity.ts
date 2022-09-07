@@ -14,7 +14,7 @@ import {
 
 export enum UserTypeEnum {
   Vendor = 'vendor',
-  Costumer = 'costumer'
+  Customer = 'customer'
 }
 
 @Entity()
@@ -42,7 +42,7 @@ export class UserEntity {
     type: 'enum',
     name: 'roles',
     enum: UserTypeEnum,
-    default: UserTypeEnum.Costumer,
+    default: UserTypeEnum.Customer,
   })
   public role!: UserTypeEnum;
 

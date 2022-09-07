@@ -4,10 +4,10 @@ import { ProductService } from '../services/product.service.abstract';
 import { ProductControllerAbs } from './product.controller.abstract';
 import { ProductUpdateDto } from '../dto/productUpdate.dto';
 import { AuthUser, IAuthUser } from '../../auth/decorators/auth.decorator';
+import { Authorization } from 'src/modules/auth/decorators/authorization.decorator';
 
 import type { UpdateResult, DeleteResult } from 'typeorm';
 import type { ProductEntity } from '../entities/product.entity';
-import { Authorization } from 'src/modules/auth/decorators/authorization.decorator';
 
 @Controller('product')
 export class ProductController extends ProductControllerAbs {

@@ -11,7 +11,6 @@ export class CreateUserResponseDto {
   @IsNotEmpty()
   public password!: string;
 
-  //@isEnum(UserTypeEnum) ---> Why it`s not work
-  public role!: UserTypeEnum;
+  public role?: UserTypeEnum;
 
 }

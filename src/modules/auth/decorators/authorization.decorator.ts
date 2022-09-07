@@ -6,7 +6,7 @@ import { RoleGuard } from '../guard/roles.guard';
 
 type AuthorizationReturnType = ReturnType<typeof applyDecorators>
 
-export type UserType = 'vendor' | 'costumer';
+export type UserType = 'vendor' | 'customer';
 
 export const REQUIRED_USER_TYPES = 'role';
 

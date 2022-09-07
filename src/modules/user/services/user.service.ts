@@ -32,15 +32,16 @@ export class UserServiceImpl extends UserService {
   public override async createUser(
     userDto: CreateUserResponseDto,
   ): Promise<UserEntity> {
+    const { email, password, role } = userDto;
     const checkUser = await this.findUser(userDto);
     if (checkUser != null) {
       throw new BadRequestException('User already exist');
     }
     const salt = await genSalt(10);
     const newUser = {
-      email: userDto.email,
-      password: await hash(userDto.password, salt),
-      role: userDto.role,
+      email,
+      password: await hash(password, salt),
+      role,
     };
     return this._usersRepository.save(newUser);
   }
