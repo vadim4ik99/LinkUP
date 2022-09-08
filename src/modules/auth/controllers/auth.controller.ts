@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service.abstract';
 import { RegisterGuard } from '../../../@framework/guard/register.guard';
@@ -39,7 +38,7 @@ export class AuthController extends AuthControllerAbs {
     return this._authService.singIn(userDto);
   }
 
-  //@UseGuards(RegisterGuard)
+  @UseGuards(RegisterGuard)
   @Post('/recovery')
   public override async forgotPassword(
     @Body() userDto: UserEmailDTO,

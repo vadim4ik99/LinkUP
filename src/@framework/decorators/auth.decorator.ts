@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { createParamDecorator } from '@nestjs/common';
 
 import type { ExecutionContext } from '@nestjs/common';

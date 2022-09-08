@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -22,12 +23,13 @@ import { ProductModule } from './modules/product/product.module';
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.{entity,view}.{ts,js}'],
         migrations : [__dirname + '/migrations/*.{ts,js}'],
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
     { module: AuthModule, global: true },
-    ProductModule,
+    { module: ProductModule, global: true },
+    { module: UserModule, global: true },
   ],
   controllers: [],
   providers: [],

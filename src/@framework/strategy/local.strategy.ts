@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Strategy } from 'passport-local';

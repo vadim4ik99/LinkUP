@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ProductService } from './product.service.abstract';
 import { ProductRepository } from '../repositories/product.repository';

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {
   Injectable,
   NotFoundException,
@@ -63,15 +62,14 @@ export class AuthServiceImpl extends AuthService {
 
   public override async sendEmailTemplate(
     userDto: UserEmailDTO,
-    tamplate: EmailTamplate,
+    template: EmailTamplate,
   ): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
     const token = await this._jwtService.signAsync(userDto, expiresIn);
-    tamplate;
     await this._mailService.sendEmail(
       userDto.email,
       'Welcome to site',
-      tamplate,
+      template,
       token,
     );
   }

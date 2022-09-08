@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ProductDTO } from '../dto/product.dto';
 import { ProductService } from '../services/product.service.abstract';
