@@ -2,7 +2,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Strategy } from 'passport-local';
-import { AuthService } from '../services/auth.service.abstract';
+import { AuthService } from '../../modules/auth/services/auth.service.abstract';
 
 import type { UserLoginDto } from 'src/modules/user/dto/user-login.dto';
 import type { UserTypeEnum } from 'src/modules/user/entities/user.entity';

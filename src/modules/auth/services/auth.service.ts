@@ -16,7 +16,7 @@ import { UserLoginDto } from '../../user/dto/user-login.dto';
 
 import type { IPayload } from '../interface/payload.interface';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-import type { IAuthUser } from '../decorators/auth.decorator';
+import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import type { UserEmailDTO } from '../../user/dto/user-email.dto';
 import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
@@ -37,7 +37,7 @@ export class AuthServiceImpl extends AuthService {
     userDto: CreateUserResponseDto,
   ): Promise<UserLoginDto> {
     const password = userDto.password;
-    const user = await this._userService.findUser(userDto);
+    const user = await this._userService.findUser(userDto.email);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
@@ -67,7 +67,7 @@ export class AuthServiceImpl extends AuthService {
   ): Promise<void> {
     const expiresIn = { expiresIn: '1d' };
     const token = await this._jwtService.signAsync(userDto, expiresIn);
-    console.log('email token', token);
+    tamplate;
     await this._mailService.sendEmail(
       userDto.email,
       'Welcome to site',
@@ -86,11 +86,11 @@ export class AuthServiceImpl extends AuthService {
   public override async forgotPassword(
     userDto: UserEmailDTO,
   ): Promise<void> {
-    const user = await this._userService.findUser(userDto);
+    const user = await this._userService.findUser(userDto.email);
     if (!user) {
       throw new NotFoundException('Wrong email');
     }
-    await this.sendEmailTemplate(user, EmailTamplate.ForgotPassword);
+    await this.sendEmailTemplate(userDto, EmailTamplate.ForgotPassword);
   }
 
   public override async resetPassword(
@@ -105,7 +105,6 @@ export class AuthServiceImpl extends AuthService {
   ): Promise<unknown> {
     const payload = { email: userDto.email, password: userDto.password };
     const token = await this._jwtService.signAsync(payload);
-    console.log('login token', token);
     return token;
   }
 

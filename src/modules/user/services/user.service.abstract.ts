@@ -1,4 +1,4 @@
-import type { IAuthUser } from 'src/modules/auth/decorators/auth.decorator';
+import type { IAuthUser } from 'src/@framework/decorators/auth.decorator';
 import type { UpdateResult } from 'typeorm';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
 import type { UserEmailDTO } from '../dto/user-email.dto';
@@ -7,7 +7,7 @@ import type { UserEntity } from '../entities/user.entity';
 
 export abstract class UserService {
 
-  public abstract findUser(userDto: UserEmailDTO): Promise<UserEntity | null>;
+  public abstract findUser(email: string): Promise<UserEntity | null>;
 
   public abstract createUser(
     userDto: CreateUserResponseDto,

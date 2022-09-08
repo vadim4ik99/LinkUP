@@ -2,7 +2,7 @@ import type { EmailTamplate } from '../../mail/services/mail.service';
 import type { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import type { UserDTO } from '../../user/dto/user.dto';
 import type { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
-import type { IAuthUser } from '../decorators/auth.decorator';
+import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { UserEmailDTO } from '../../user/dto/user-email.dto';
 import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
 import type { UserLoginDto } from 'src/modules/user/dto/user-login.dto';

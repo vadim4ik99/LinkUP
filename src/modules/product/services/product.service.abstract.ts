@@ -5,7 +5,7 @@ import type { ProductEntity } from '../entities/product.entity';
 
 export abstract class ProductService {
 
-    public abstract createProduct(createProductDto: ProductDTO): Promise<ProductEntity>;
+    public abstract createProduct(createProductDto: ProductDTO): Promise<ProductDTO>;
 
     public abstract editProduct(id: number,  productUpdateDto: ProductUpdateDto): Promise<UpdateResult>;
 

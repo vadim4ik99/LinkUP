@@ -31,8 +31,8 @@ export class ProductEntity {
   @Column('text')
   public descriptionFull!: string;
 
-  @Column()
-  public sold!: number;
+  @Column({ nullable: true })
+  public sold?: number;
 
   @Column()
   public quantity!: number;
@@ -41,16 +41,16 @@ export class ProductEntity {
   public carts!: CartEntity[];
 
   @OneToMany(() => CategoryProductEntity, (catProd) => catProd.product)
-  public categoryProducts!: CategoryProductEntity[];
+  public categoryProducts?: CategoryProductEntity[];
 
   @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.product)
-  public orderProducts!: OrderProductEntity[];
+  public orderProducts?: OrderProductEntity[];
 
   @ManyToOne(() => FileEntity, (image) => image.products)
-  public image!: FileEntity;
+  public image?: FileEntity;
 
   @RelationId((product: ProductEntity) => product.image)
-  public imageId!: number;
+  public imageId?: number;
 
   @CreateDateColumn()
   public createdAt!: Date;

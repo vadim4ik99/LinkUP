@@ -8,7 +8,7 @@ import type { UserEntity } from '../entities/user.entity';
 import { Repository, type UpdateResult } from 'typeorm';
 import type { UserEmailDTO } from '../dto/user-email.dto';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
-import type { IAuthUser } from '../../auth/decorators/auth.decorator';
+import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { UserPasswordDTO } from '../dto/user-password.dto';
 
 @Injectable()
@@ -22,9 +22,8 @@ export class UserServiceImpl extends UserService {
   }
 
   public override async findUser(
-    userDto: UserEmailDTO,
+    email: string,
   ): Promise<UserEntity | null> {
-    const email = userDto.email;
     const user = await this._usersRepository.findOneBy({ email });
     return user;
   }
@@ -33,7 +32,7 @@ export class UserServiceImpl extends UserService {
     userDto: CreateUserResponseDto,
   ): Promise<UserEntity> {
     const { email, password, role } = userDto;
-    const checkUser = await this.findUser(userDto);
+    const checkUser = await this.findUser(email);
     if (checkUser != null) {
       throw new BadRequestException('User already exist');
     }

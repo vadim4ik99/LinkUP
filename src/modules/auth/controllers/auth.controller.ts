@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service.abstract';
-import { RegisterGuard } from '../guard/register.guard';
-import { JwtGuard } from '../guard/jwt.guard';
-import { AuthUser, IAuthUser } from '../decorators/auth.decorator';
+import { RegisterGuard } from '../../../@framework/guard/register.guard';
+import { JwtGuard } from '../../../@framework/guard/jwt.guard';
+import { AuthUser, IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import { UserPasswordDTO } from '../../user/dto/user-password.dto';
 import { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import { UserEmailDTO } from '../../user/dto/user-email.dto';
@@ -39,7 +39,7 @@ export class AuthController extends AuthControllerAbs {
     return this._authService.singIn(userDto);
   }
 
-  @UseGuards(RegisterGuard)
+  //@UseGuards(RegisterGuard)
   @Post('/recovery')
   public override async forgotPassword(
     @Body() userDto: UserEmailDTO,

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { AuthModule } from '../auth/auth.module';
 import { ProductController } from './controllers/product.controller';
 import { CategoryProductEntity } from './entities/category-product.entity';
 import { OrderProductEntity } from './entities/order-product.entity';
@@ -50,6 +51,7 @@ const productService = {
       CategoryProductEntity,
       OrderProductEntity,
     ]),
+    AuthModule,
   ],
   controllers: [ProductController],
   providers: [
