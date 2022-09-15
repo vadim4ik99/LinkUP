@@ -37,4 +37,8 @@ export abstract class AuthService {
     userDto: Pick<UserDTO, 'password' | 'email'>,
   ): Promise<unknown>;
 
+  public abstract  logOut(
+    user: IAuthUser
+  ):  Promise<boolean>;
+
 }

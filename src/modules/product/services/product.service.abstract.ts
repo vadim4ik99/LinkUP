@@ -1,7 +1,6 @@
 import type { UpdateResult, DeleteResult } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
-import type { ProductEntity } from '../entities/product.entity';
 
 export abstract class ProductService {
 
@@ -11,6 +10,10 @@ export abstract class ProductService {
 
     public abstract deleteProduct(id: number): Promise<DeleteResult>;
 
-    public abstract getProduct(id: number): Promise<ProductEntity | null>;
+    public abstract getProduct(id: number): Promise<ProductDTO | null>;
+
+    public abstract getProductListByCategory(id: number): Promise<ProductDTO[] | null>;
+
+    public abstract searchProducts(str: string): Promise<ProductDTO[] | null>;
 
 }

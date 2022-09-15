@@ -17,4 +17,6 @@ export abstract class AuthControllerAbs {
 
   public abstract resetPassword(user: IAuthUser, payload: UserPasswordDTO): Promise<UpdateResult>;
 
+  public abstract logOut(res: Response, user: IAuthUser): Promise<void>;
+
 }

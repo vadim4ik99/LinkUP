@@ -11,6 +11,17 @@ export class CategoriesDTO {
   public name!: string;
 
   @IsInt()
+  public imgId?: number;
+
+}
+
+export class CategoriesUpdateDTO {
+
+  @IsString()
+  @IsNotEmpty()
+  public name!: string;
+
+  @IsInt()
   public imgId!: number;
 
 }

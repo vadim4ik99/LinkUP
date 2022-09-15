@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from '../services/auth.service.abstract';
 import { RegisterGuard } from '../../../@framework/guard/register.guard';
 import { JwtGuard } from '../../../@framework/guard/jwt.guard';
@@ -53,6 +53,16 @@ export class AuthController extends AuthControllerAbs {
     @Body() payload: UserPasswordDTO,
   ): Promise<UpdateResult> {
     return this._authService.resetPassword(user, payload);
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('/logout')
+  public override async logOut(
+    @Res() res: Response,
+    @AuthUser() user: IAuthUser,
+  ): Promise<void> {
+    await this._authService.logOut(user);
+    res.headers.set('Authorization', 'null');
   }
 
 }

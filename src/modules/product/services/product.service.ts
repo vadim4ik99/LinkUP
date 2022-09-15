@@ -1,9 +1,9 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ProductService } from './product.service.abstract';
 import { ProductRepository } from '../repositories/product.repository';
+import { Like, Repository } from 'typeorm';
 
 import type { ProductEntity } from '../entities/product.entity';
-import { Repository } from 'typeorm';
 import type { UpdateResult, DeleteResult } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
@@ -30,10 +30,22 @@ export class ProductServiceImpl extends ProductService {
     return this._productRepository.delete({ id });
   }
 
-  public override async getProduct(id: number): Promise<ProductEntity | null> {
+  public override async getProduct(id: number): Promise<ProductDTO | null> {
     const product = this._productRepository.findOneBy({ id });
     if (!product) { throw new BadRequestException('Can`t find product with this id');}
     return product;
+  }
+
+  public override async getProductListByCategory(id: number): Promise<ProductDTO[] | null> {
+    const category = this._productRepository.find({ relations: ['category'], where:{ id } });
+    return category;
+  }
+
+  public override async searchProducts(str: string): Promise<ProductDTO[] | null> {
+    const result = this._productRepository.findBy({
+      title: Like(str),
+    });
+    return result;
   }
 
 }
