@@ -11,7 +11,11 @@ import {
   ManyToOne,
   RelationId,
 } from 'typeorm';
-import { RoleEnum } from '../../auth/role.enum';
+
+export enum UserTypeEnum {
+  Vendor = 'vendor',
+  Customer = 'customer'
+}
 
 @Entity()
 export class UserEntity {
@@ -34,8 +38,13 @@ export class UserEntity {
   @Column()
   public password!: string;
 
-  @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.Costumer })
-  public role!: RoleEnum;
+  @Column({
+    type: 'enum',
+    name: 'roles',
+    enum: UserTypeEnum,
+    default: UserTypeEnum.Customer,
+  })
+  public role!: UserTypeEnum;
 
   @OneToMany(() => CartEntity, (cart) => cart.user)
   public carts?: CartEntity[];

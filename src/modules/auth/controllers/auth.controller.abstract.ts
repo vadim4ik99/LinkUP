@@ -1,4 +1,4 @@
-import type { IAuthUser } from '../decorators/auth.decorator';
+import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { UserPasswordDTO } from '../../user/dto/user-password.dto';
 import type { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import type { UserEmailDTO } from '../../user/dto/user-email.dto';

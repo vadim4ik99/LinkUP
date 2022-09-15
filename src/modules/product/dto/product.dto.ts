@@ -1,10 +1,6 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class ProductDTO {
-
-  @IsInt()
-  @IsNotEmpty()
-  public id!: number;
 
   @IsString()
   @IsNotEmpty()
@@ -20,6 +16,7 @@ export class ProductDTO {
   @IsString()
   public descriptionFull!: string;
 
+  @IsOptional()
   @IsInt()
   public sold?: number;
 
@@ -27,10 +24,12 @@ export class ProductDTO {
   @IsNotEmpty()
   public quantity!: number;
 
+  @IsOptional()
   @IsInt()
-  public categoriesId!: number;
+  public categoriesId?: number;
 
+  @IsOptional()
   @IsInt()
-  public imgId!: number;
+  public imgId?: number;
 
 }

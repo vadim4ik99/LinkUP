@@ -17,7 +17,7 @@ export class ProductServiceImpl extends ProductService {
     super();
   }
 
-  public override async createProduct(createProductDto: ProductDTO): Promise<ProductEntity> {
+  public override async createProduct(createProductDto: ProductDTO): Promise<ProductDTO> {
     return this._productRepository.save(createProductDto);
   }
 

@@ -1,5 +1,5 @@
-import { RoleEnum } from '../../auth/role.enum';
 import { Exclude, Expose } from 'class-transformer';
+import { UserTypeEnum } from '../entities/user.entity';
 
 @Exclude()
 export class UserLoginDto {
@@ -14,6 +14,6 @@ export class UserLoginDto {
   public email!: string;
 
   @Expose()
-  public role!: RoleEnum;
+  public role!: UserTypeEnum;
 
 }

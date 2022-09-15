@@ -5,9 +5,9 @@ import { UserModule } from '../user/user.module';
 import { AuthServiceImpl } from './services/auth.service';
 import { AuthService } from './services/auth.service.abstract';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { JwtStrategy } from '../../@framework/strategy/jwt.strategy';
 import { MailModule } from '../mail/mail.module';
-import { LocalStrategy } from './strategy/local.strategy';
+import { LocalStrategy } from '../../@framework/strategy/local.strategy';
 import { AuthController } from './controllers/auth.controller';
 
 const authService = { provide: AuthService, useClass: AuthServiceImpl };
