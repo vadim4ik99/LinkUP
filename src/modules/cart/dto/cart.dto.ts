@@ -9,4 +9,7 @@ export class CartDTO {
   @IsInt()
   public userId!: number;
 
+  @IsInt()
+  public productId!: number;
+
 }

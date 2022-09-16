@@ -1,11 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CartRepository } from '../repositories/cart.repository';
 import { CartService } from './cart.service.abstract';
-import { ProductService } from '../../product/services/product.service.abstract';
-import { UserService } from '../../user/services/user.service.abstract';
 
 import type { CartEntity } from '../entities/cart.entity';
+import type { IAuthUser } from 'src/@framework/decorators/auth.decorator';
+import type { CartDTO } from '../dto/cart.dto';
+import type { DeleteResult } from 'typeorm';
+import type { ProductDTO } from '../../product/dto/product.dto';
 
 @Injectable()
 export class CartServiceImpl extends CartService {
@@ -13,17 +15,23 @@ export class CartServiceImpl extends CartService {
   constructor(
     @Inject(CartRepository)
     private readonly _cartRepository: Repository<CartEntity>,
-    private readonly _userService: UserService,
-    private readonly _productService: ProductService,
   ) {
     super();
   }
-  /*public override async addToCart(productId: number, quantity: number, user: string): Promise<void> {
-    const cartItems = await this._cartRepository.find({ relations: ['product','user'] });
-    const product = await this._productService.getProduct(productId);
-    const authUser = await this._userService.findUser(user);
 
+  public override async getCart(user: IAuthUser): Promise<CartDTO> {
+    const cart = this._cartRepository.findOneBy({ userId: user.id });
+    if(cart === null) { throw new NotFoundException(); }
+    return cart;
   }
-  */
+
+  public override async deleteCart(user: IAuthUser): Promise<DeleteResult> {
+    return this._cartRepository.delete({ userId : user.id } );
+  }
+
+  public override async addItemToCart(productId: ProductDTO, user: IAuthUser): Promise<CartDTO> {
+
+    if
+  }
 
 }
