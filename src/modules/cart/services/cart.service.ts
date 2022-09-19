@@ -63,4 +63,9 @@ export class CartServiceImpl extends CartService {
     return null;
   }
 
+  public override async getItemsInCard(user: IAuthUser): Promise<CartEntity[]> {
+    const userCart = await this._cartRepository.find({ relations: ['product','user'] });
+    return (await userCart).filter(item => item.user.id === user.id);
+  }
+
 }
