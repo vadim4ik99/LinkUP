@@ -12,4 +12,10 @@ export class CartDTO {
   @IsInt()
   public productId!: number;
 
+  @IsInt()
+  public quantity!: number;
+
+  @IsInt()
+  public total!: number;
+
 }
