@@ -4,7 +4,7 @@ import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 
 export abstract class ProductService {
 
-    public abstract createProduct(createProductDto: ProductDTO): Promise<ProductDTO>;
+    public abstract createProduct(createProductDto: ProductDTO): Promise<void>;
 
     public abstract editProduct(id: number,  productUpdateDto: ProductUpdateDto): Promise<UpdateResult>;
 

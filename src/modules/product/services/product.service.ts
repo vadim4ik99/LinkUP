@@ -1,24 +1,36 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ProductService } from './product.service.abstract';
 import { ProductRepository } from '../repositories/product.repository';
+import { CategoryProductRepository } from '../repositories/category-product.repository';
 import { Like, Repository } from 'typeorm';
 
 import type { ProductEntity } from '../entities/product.entity';
-import type { UpdateResult, DeleteResult } from 'typeorm';
+import type { UpdateResult, DeleteResult , DataSource } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
+import type { CategoryProductEntity } from '../entities/category-product.entity';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
 
   constructor(
     @Inject(ProductRepository)
-    private readonly _productRepository: Repository<ProductEntity>) {
+    private readonly _productRepository: Repository<ProductEntity>,
+    @Inject(CategoryProductRepository)
+    private readonly _categoryProductsRepository: Repository<CategoryProductEntity>,
+    private readonly _dataSource: DataSource,
+  ) {
     super();
   }
 
-  public override async createProduct(createProductDto: ProductDTO): Promise<ProductDTO> {
-    return this._productRepository.save(createProductDto);
+  public override async createProduct(createProductDto: ProductDTO): Promise<void> {
+    const categoryIds = createProductDto.categoryProducts;
+    await this._dataSource.transaction(async (manager) => {
+      const product = await manager.save(this._productRepository.create(createProductDto));
+      await manager.save(this._categoryProductsRepository.create(
+        categoryIds.map(categoryId => ({ product, category: { id: categoryId } })),
+      ));
+    });
   }
 
   public override async editProduct(id: number, productUpdateDto: ProductUpdateDto): Promise<UpdateResult> {
@@ -37,8 +49,8 @@ export class ProductServiceImpl extends ProductService {
   }
 
   public override async getProductListByCategory(id: number): Promise<ProductDTO[] | null> {
-    const category = this._productRepository.find({ relations: ['category'], where:{ id } });
-    return category;
+    const products = this._productRepository.find({ relations: ['category'], where:{ id } });
+    return products;
   }
 
   public override async searchProducts(str: string): Promise<ProductDTO[] | null> {

@@ -24,7 +24,7 @@ export class ProductUpdateDto {
   public quantity!: number;
 
   @IsInt()
-  public categoriesId!: number;
+  public categoryProducts!: number[];
 
   @IsInt()
   public imgId!: number;

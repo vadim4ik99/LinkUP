@@ -19,3 +19,13 @@ export class CartDTO {
   public total!: number;
 
 }
+
+export class CartUpdateProductDTO {
+
+  @IsInt()
+  public quantity!: number;
+
+  @IsInt()
+  public total!: number;
+
+}

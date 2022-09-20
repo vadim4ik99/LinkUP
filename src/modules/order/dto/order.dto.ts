@@ -8,10 +8,7 @@ export class OrderDTO {
   public id!: number;
 
   @IsString()
-  public name!: string;
-
-  @IsInt()
-  public imgId!: number;
+  public user_id!: string;
 
   @IsEnum(OrderStatus)
   public status!: OrderStatus;

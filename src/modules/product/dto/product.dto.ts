@@ -1,4 +1,5 @@
 import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { CategoryProductEntity } from '../entities/category-product.entity';
 
 export class ProductDTO {
 
@@ -28,9 +29,8 @@ export class ProductDTO {
   @IsNotEmpty()
   public quantity!: number;
 
-  @IsOptional()
   @IsInt()
-  public categoriesId?: number;
+  public categoryProducts!: CategoryProductEntity[];
 
   @IsOptional()
   @IsInt()
