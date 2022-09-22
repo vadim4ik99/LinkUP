@@ -6,8 +6,8 @@ import { ProductService } from '../../product/services/product.service.abstract'
 
 import type { CartEntity } from '../entities/cart.entity';
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
-import type { CartDTO, CartUpdateProductDTO } from '../dto/cart.dto';
-import type { DeleteResult } from 'typeorm';
+import type { CartDTO } from '../dto/cart.dto';
+import type { DeleteResult , UpdateResult } from 'typeorm';
 import type { ProductDTO } from '../../product/dto/product.dto';
 
 @Injectable()
@@ -41,7 +41,7 @@ export class CartServiceImpl extends CartService {
     productId: ProductDTO,
     user: IAuthUser,
     quantity: number,
-  ): Promise<CartUpdateProductDTO> {
+  ): Promise<UpdateResult | CartDTO> {
     const product = await this._productService.getProduct(productId.id);
     if (!product) { throw new  NotFoundException(); }
 
@@ -61,6 +61,15 @@ export class CartServiceImpl extends CartService {
     newItem.userId = user.id;
     newItem.total = productId.price * quantity;
     return await this._cartRepository.save(newItem);
+  }
+
+  public override async getItemsInCard(user: IAuthUser): Promise<number[]> {
+    const entity = await this._cartRepository.find({
+      where: { user: { id: user.id } },
+      relations: ['product','user'],
+    });
+    const productIds = entity.map(item => { return item.productId; });
+    return productIds;
   }
 
 }

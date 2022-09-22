@@ -1,10 +1,11 @@
 import type { UpdateResult, DeleteResult } from 'typeorm';
+import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 
 export abstract class ProductService {
 
-    public abstract createProduct(createProductDto: ProductDTO): Promise<void>;
+    public abstract createProduct(createProductDto: CreateProductDTO): Promise<void>;
 
     public abstract editProduct(id: number,  productUpdateDto: ProductUpdateDto): Promise<UpdateResult>;
 

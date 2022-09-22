@@ -2,13 +2,14 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { ProductService } from './product.service.abstract';
 import { ProductRepository } from '../repositories/product.repository';
 import { CategoryProductRepository } from '../repositories/category-product.repository';
-import { Like, Repository } from 'typeorm';
+import { Like, Repository , DataSource } from 'typeorm';
 
 import type { ProductEntity } from '../entities/product.entity';
-import type { UpdateResult, DeleteResult , DataSource } from 'typeorm';
+import type { UpdateResult, DeleteResult  } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { CategoryProductEntity } from '../entities/category-product.entity';
+import type { CreateProductDTO } from '../dto/create-product.dto';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
@@ -23,12 +24,19 @@ export class ProductServiceImpl extends ProductService {
     super();
   }
 
-  public override async createProduct(createProductDto: ProductDTO): Promise<void> {
-    const categoryIds = createProductDto.categoryProducts;
+  public override async createProduct(createProductDto: CreateProductDTO): Promise<void> {
+    const { title, price, descriptionSmall, descriptionFull, quantity, categoryIds } = createProductDto;
     await this._dataSource.transaction(async (manager) => {
-      const product = await manager.save(this._productRepository.create(createProductDto));
+      const product = await manager.save(this._productRepository.create({
+        title,
+        price,
+        descriptionSmall,
+        descriptionFull,
+        quantity,
+      }),
+      );
       await manager.save(this._categoryProductsRepository.create(
-        categoryIds.map(categoryId => ({ product, category: { id: categoryId } })),
+        categoryIds.map(categoryId => ({ product, category: { id: +categoryId } })),
       ));
     });
   }

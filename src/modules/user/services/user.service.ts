@@ -10,6 +10,7 @@ import type { UserEmailDTO } from '../dto/user-email.dto';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { UserPasswordDTO } from '../dto/user-password.dto';
+import type { UserProfileDTO } from '../dto/user-profile.dto';
 
 @Injectable()
 export class UserServiceImpl extends UserService {
@@ -68,6 +69,11 @@ export class UserServiceImpl extends UserService {
       { email: user.email },
       { password: newPassword },
     );
+  }
+
+  public override async editProfile(userDto: UserProfileDTO): Promise<UpdateResult> {
+    const { id, firstName, lastName } = userDto;
+    return this._usersRepository.update({ id }, { firstName, lastName });
   }
 
 }

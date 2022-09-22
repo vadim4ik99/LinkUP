@@ -1,7 +1,7 @@
-import type { DeleteResult } from 'typeorm';
+import type { DeleteResult, UpdateResult } from 'typeorm';
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { ProductDTO } from '../../product/dto/product.dto';
-import type { CartDTO, CartUpdateProductDTO } from '../dto/cart.dto';
+import type { CartDTO } from '../dto/cart.dto';
 
 export abstract class CartControllerAbs {
 
@@ -9,7 +9,7 @@ export abstract class CartControllerAbs {
     productId: ProductDTO,
     user: IAuthUser,
     quantity: number,
-  ): Promise<CartUpdateProductDTO>;
+  ): Promise<UpdateResult | CartDTO>;
 
   public abstract getCart(user: IAuthUser): Promise<CartDTO[]>;
 

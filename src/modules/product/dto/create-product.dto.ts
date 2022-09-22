@@ -1,6 +1,6 @@
-import { IsArray, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class ProductUpdateDto {
+export class CreateProductDTO {
 
   @IsString()
   @IsNotEmpty()
@@ -17,9 +17,6 @@ export class ProductUpdateDto {
   public descriptionFull!: string;
 
   @IsInt()
-  public sold?: number;
-
-  @IsInt()
   @IsNotEmpty()
   public quantity!: number;
 
@@ -27,7 +24,8 @@ export class ProductUpdateDto {
   @IsString()
   public categoryIds!: string[];
 
+  @IsOptional()
   @IsInt()
-  public imgId!: number;
+  public imgId?: number;
 
 }

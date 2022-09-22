@@ -2,7 +2,7 @@ import { Body, Controller, Put } from '@nestjs/common';
 import { UserProfileDTO } from '../dto/user-profile.dto';
 import { UserService } from '../services/user.service.abstract';
 import { UserControllerAbs } from './user.controller.abstract';
-import type { UserDTO } from '../dto/user.dto';
+import type { UpdateResult } from 'typeorm';
 
 @Controller('user')
 export class UserController extends UserControllerAbs {
@@ -14,8 +14,8 @@ export class UserController extends UserControllerAbs {
   @Put('/edit')
   public override async editProfile(
     @Body() userDto: UserProfileDTO,
-  ): Promise<UserDTO> {
-    return this._userService.editProfile(userDto);
+  ): Promise<UpdateResult> {
+    return await this._userService.editProfile(userDto);
   }
 
 }

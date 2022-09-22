@@ -3,6 +3,7 @@ import type { UpdateResult } from 'typeorm';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
 import type { UserEmailDTO } from '../dto/user-email.dto';
 import type { UserPasswordDTO } from '../dto/user-password.dto';
+import { UserProfileDTO } from '../dto/user-profile.dto';
 import type { UserEntity } from '../entities/user.entity';
 
 export abstract class UserService {
@@ -19,5 +20,7 @@ export abstract class UserService {
     user: IAuthUser,
     userDto: UserPasswordDTO,
   ): Promise<UpdateResult>;
+
+  public abstract editProfile(userDto: UserProfileDTO): Promise<UpdateResult>;
 
 }
