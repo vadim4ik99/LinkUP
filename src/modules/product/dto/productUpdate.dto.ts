@@ -23,8 +23,7 @@ export class ProductUpdateDto {
   @IsNotEmpty()
   public quantity!: number;
 
-  @IsArray()
-  @IsString()
+  @IsString({ each: true })
   public categoryIds!: string[];
 
   @IsInt()

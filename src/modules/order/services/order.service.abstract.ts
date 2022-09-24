@@ -1,10 +1,11 @@
+import type { IAuthUser } from 'src/@framework/decorators/auth.decorator';
+
 export abstract class OrderService {
-  /*
-    abstract order_list();
-    abstract create_order();
-    abstract get_order();
-    abstract update_order();
-    abstract delete_order();
-    abstract change_status_order();
-*/
+
+  public abstract order(user: IAuthUser): Promise<void>;
+
+  public abstract getAllOrders(user: IAuthUser): Promise<void>;
+
+  public abstract changeOrderStatus(orderId: number): Promise<void>;
+
 }

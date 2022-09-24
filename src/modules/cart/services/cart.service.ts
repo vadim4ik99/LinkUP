@@ -50,7 +50,7 @@ export class CartServiceImpl extends CartService {
       const cart = await this.getCartsByUser(user);
       const quantity = cart[0]!.quantity += 1; // Forbidden non-null assertion.
       const total = cart[0]!.total * quantity; // Forbidden non-null assertion.
-      return await this._cartRepository.update(
+      return this._cartRepository.update(
         { id: cart[0]!.id },
         { quantity, total },
       );
@@ -60,7 +60,7 @@ export class CartServiceImpl extends CartService {
     newItem.productId = productId.id;
     newItem.userId = user.id;
     newItem.total = productId.price * quantity;
-    return await this._cartRepository.save(newItem);
+    return this._cartRepository.save(newItem);
   }
 
   public override async getItemsInCard(user: IAuthUser): Promise<number[]> {
@@ -68,7 +68,7 @@ export class CartServiceImpl extends CartService {
       where: { user: { id: user.id } },
       relations: ['product','user'],
     });
-    const productIds = entity.map(item => { return item.productId; });
+    const productIds = entity.map(item => item.productId);
     return productIds;
   }
 

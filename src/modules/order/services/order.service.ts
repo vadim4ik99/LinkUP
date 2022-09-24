@@ -24,8 +24,7 @@ export class OrderServiceImpl extends OrderService {
   ) {
     super();
   }
-  public async order(user: IAuthUser): Promise<void> {
-
+  public override async order(user: IAuthUser): Promise<void> {
     const cartProductIds = await this._cartService.getItemsInCard(user);
     const authUser = await this._userService.findUser(user.email);
     if(!authUser) { throw new UnauthorizedException(); }

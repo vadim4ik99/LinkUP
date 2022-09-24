@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CategoryRepository } from '../repositories/categories.repository';
 import { CategoriesService } from './categories.service.abstract';
@@ -11,8 +11,9 @@ import type { UpdateResult, DeleteResult } from 'typeorm';
 export class CategoriesServiceImpl extends CategoriesService {
 
   constructor(
-        @Inject(CategoryRepository)
-        private readonly _categoryRepository: Repository<CategoriesEntity>) {
+    @Inject(CategoryRepository)
+    private readonly _categoryRepository: Repository<CategoriesEntity>,
+  ) {
     super();
   }
 
@@ -22,6 +23,7 @@ export class CategoriesServiceImpl extends CategoriesService {
 
   public override async editCategoryById(id: number,  categoryUpdateDto: CategoriesUpdateDTO): Promise<UpdateResult> {
     const category = await this.getCategoryById(id);
+    if(!category) {throw new NotFoundException();}
     return this._categoryRepository.update({ id: category?.id }, { ...categoryUpdateDto });
   }
 
@@ -31,7 +33,7 @@ export class CategoriesServiceImpl extends CategoriesService {
 
   public override async getCategoryById(id: number): Promise<CategoriesDTO | null> {
     const category = this._categoryRepository.findOneBy({ id });
-    if (!category) { throw new BadRequestException('Can`t find category');}
+    if (!category) { throw new NotFoundException('Can`t find category');}
     return category;
   }
 
