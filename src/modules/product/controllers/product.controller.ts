@@ -61,8 +61,6 @@ export class ProductController extends ProductControllerAbs {
     return this._productServise.getAllProduct();
   }
 
-  
-
   @Get('/category/:id')
   public override async getProductListByCategory(@Param('id') id: string): Promise<ProductDTO[] | null> {
     return this._productServise.getProductListByCategory(+id);

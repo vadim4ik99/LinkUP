@@ -10,6 +10,7 @@ import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { CategoryProductEntity } from '../entities/category-product.entity';
 import type { CreateProductDTO } from '../dto/create-product.dto';
+import { ProductOutDTO } from '../dto/product-output.dto';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
@@ -69,7 +70,7 @@ export class ProductServiceImpl extends ProductService {
     return this._productRepository.delete({ id });
   }
 
-  public override async getProduct(id: number): Promise<ProductDTO | null> {
+  public override async getProduct(id: number): Promise<ProductOutDTO | null> {
     const product = await this._productRepository.findOne({
       where: { id: id }, relations: ['categoryProducts'] });
     if (!product) { throw new BadRequestException('Can`t find product with this id');}

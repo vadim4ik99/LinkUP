@@ -5,6 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { UserModule } from './modules/user/user.module';
 import { CartModule } from './modules/cart/cart.module';
+import { OrderModule } from './modules/order/order.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { CartModule } from './modules/cart/cart.module';
     { module: ProductModule, global: true },
     { module: UserModule, global: true },
     { module: CartModule, global: true },
-    { module: ProductModule, global: true }
+    { module: ProductModule, global: true },
+    { module: OrderModule, global: true }
   ],
   controllers: [],
   providers: [],

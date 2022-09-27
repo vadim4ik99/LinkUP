@@ -5,7 +5,7 @@ import { AuthUser, IAuthUser } from '../../../@framework/decorators/auth.decorat
 import { JwtGuard } from '../../../@framework/guard/jwt.guard';
 
 import type { CartDTO } from '../dto/cart.dto';
-import type { DeleteResult, UpdateResult } from 'typeorm';
+import type { UpdateResult } from 'typeorm';
 import type { IAddItemToCart } from '../interface/additem.interface';
 
 @Controller('cart')
@@ -26,7 +26,7 @@ export class CartController extends CartControllerAbs {
 
   @UseGuards(JwtGuard)
   @Delete('/')
-  public override async deleteCart(@AuthUser() user: IAuthUser): Promise<DeleteResult> {
+  public override async deleteCart(@AuthUser() user: IAuthUser): Promise<CartDTO[]> {
     return await this._cartService.deleteCart(user);
   }
 

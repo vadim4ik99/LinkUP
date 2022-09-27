@@ -1,18 +1,17 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { OrderRepository } from '../repositories/order.repositories';
 import { OrderService } from './order.service.abstract';
 import { CartService } from '../../cart/services/cart.service.abstract';
 import { UserService } from '../../user/services/user.service.abstract';
 import { OrderProductRepository } from '../../product/repositories/order-product.repository';
-import { paginate } from 'nestjs-typeorm-paginate';
 
 import type { OrderEntity, OrderStatus } from '../entities/order.entity';
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { OrderProductEntity } from '../../product/entities/order-product.entity';
 import type { OrderDTO } from '../dto/order.dto';
-import type { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import type { UpdateResult } from 'typeorm';
+
 
 @Injectable()
 export class OrderServiceImpl extends OrderService {
@@ -31,6 +30,7 @@ export class OrderServiceImpl extends OrderService {
 
   public override async order(user: IAuthUser): Promise<void> {
     const cartProductIds = await this._cartService.getItemsInCard(user);
+    if(!cartProductIds) {throw new BadRequestException()}
     const authUser = await this._userService.findUser(user.email);
     if(!authUser) { throw new UnauthorizedException(); }
     await this._dataSource.transaction(async (manager) => {
@@ -39,23 +39,18 @@ export class OrderServiceImpl extends OrderService {
         cartProductIds.map(productId => ( { order: newOrder , product: { id: productId } })),
       ));
     });
+    await this._cartService.deleteCart(user);
   }
 
   public override async getAllOrders(user: IAuthUser): Promise<OrderDTO[]> {
     return this._orderRepository.find({
       where: { user: { id: user.id } },
-      relations: ['product','user'],
+      relations: ['user']
     });
   }
 
   public override async changeOrderStatus(orderId: number, status: OrderStatus): Promise<UpdateResult> {
     return this._orderRepository.update({ id : orderId },{ status });
-  }
-
-  public override async paginate(options: IPaginationOptions, user: IAuthUser): Promise<Pagination<OrderEntity>> {
-    return paginate<OrderEntity>(this._orderRepository, options, {
-      userId: user.id,
-    });
   }
 
 }
