@@ -4,7 +4,7 @@ export class UserRole1662548682807 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query('CREATE TYPE roles AS ENUM (\'vendor\', \'customer\')');
-    await queryRunner.query('ALTER TABLE user_entity ADD COLUMN roles roles');
+    await queryRunner.query('ALTER TABLE user_entity ADD COLUMN IF NOT EXISTS roles roles');
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

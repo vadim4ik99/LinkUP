@@ -1,5 +1,4 @@
-import { Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
-import { ProductDTO } from 'src/modules/product/dto/product.dto';
+import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { CartService } from '../services/cart.service.abstract';
 import { CartControllerAbs } from './cart.controller.abstract';
 import { AuthUser, IAuthUser } from '../../../@framework/decorators/auth.decorator';
@@ -7,6 +6,7 @@ import { JwtGuard } from '../../../@framework/guard/jwt.guard';
 
 import type { CartDTO } from '../dto/cart.dto';
 import type { DeleteResult, UpdateResult } from 'typeorm';
+import type { IAddItemToCart } from '../interface/additem.interface';
 
 @Controller('cart')
 export class CartController extends CartControllerAbs {
@@ -16,13 +16,12 @@ export class CartController extends CartControllerAbs {
   }
 
   @UseGuards(JwtGuard)
-  @Post('/')
+  @Post()
   public override async addItemToCart(
-    productId: ProductDTO,
+    @Body() payload: IAddItemToCart,
     @AuthUser() user: IAuthUser,
-    quantity: number,
   ): Promise<UpdateResult | CartDTO> {
-    return await this._cartService.addItemToCart(productId, user, quantity);
+    return await this._cartService.addItemToCart(payload.productId, user, payload.quantity);
   }
 
   @UseGuards(JwtGuard)

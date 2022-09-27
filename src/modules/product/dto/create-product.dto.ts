@@ -1,4 +1,4 @@
-import { IsArray, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDTO {
 
@@ -20,8 +20,7 @@ export class CreateProductDTO {
   @IsNotEmpty()
   public quantity!: number;
 
-  @IsArray()
-  @IsString()
+  @IsString({each: true})
   public categoryIds!: string[];
 
   @IsOptional()

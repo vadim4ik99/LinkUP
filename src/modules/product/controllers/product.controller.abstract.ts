@@ -18,4 +18,10 @@ export abstract class ProductControllerAbs {
 
     public abstract getProduct(id: number): Promise<ProductDTO | null>;
 
+    public abstract getAllProduct(): Promise<ProductDTO[]>;
+
+    public abstract searchProducts(str: string): Promise<ProductDTO[] | null>;
+
+    public abstract getProductListByCategory(id: string): Promise<ProductDTO[] | null>
+
 }

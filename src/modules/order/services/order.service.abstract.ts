@@ -1,11 +1,18 @@
-import type { IAuthUser } from 'src/@framework/decorators/auth.decorator';
+import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
+
+import type { UpdateResult } from 'typeorm';
+import type { OrderEntity, OrderStatus } from '../entities/order.entity';
+import type { OrderDTO } from '../dto/order.dto';
+import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
+
 
 export abstract class OrderService {
 
   public abstract order(user: IAuthUser): Promise<void>;
 
-  public abstract getAllOrders(user: IAuthUser): Promise<void>;
+  public abstract getAllOrders(user: IAuthUser): Promise<OrderDTO[]>;
 
-  public abstract changeOrderStatus(orderId: number): Promise<void>;
+  public abstract changeOrderStatus(orderId: number, status: OrderStatus): Promise<UpdateResult>;
 
+  public abstract paginate(options: IPaginationOptions, user: IAuthUser): Promise<Pagination<OrderEntity>>;
 }

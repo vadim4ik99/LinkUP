@@ -7,7 +7,7 @@ import { UserRepository, userRepositoryFactory } from './repositories/user.repos
 import { UserServiceImpl } from './services/user.service';
 import { UserService } from './services/user.service.abstract';
 
-const userRepository = {
+const userRepository = { 
   provide: UserRepository,
   inject: [DataSource],
   useFactory: userRepositoryFactory,

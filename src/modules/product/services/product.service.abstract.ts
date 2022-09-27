@@ -1,4 +1,4 @@
-import type { UpdateResult, DeleteResult } from 'typeorm';
+import type { DeleteResult, UpdateResult } from 'typeorm';
 import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
@@ -16,5 +16,7 @@ export abstract class ProductService {
     public abstract getProductListByCategory(id: number): Promise<ProductDTO[] | null>;
 
     public abstract searchProducts(str: string): Promise<ProductDTO[] | null>;
+
+    public abstract getAllProduct(): Promise<ProductDTO[]>
 
 }

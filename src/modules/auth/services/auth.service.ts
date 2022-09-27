@@ -103,6 +103,7 @@ export class AuthServiceImpl extends AuthService {
   ): Promise<unknown> {
     const payload = { email: userDto.email, password: userDto.password };
     const token = await this._jwtService.signAsync(payload);
+    console.log('Auth ', token)
     return token;
   }
 

@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductModule } from './modules/product/product.module';
 import { UserModule } from './modules/user/user.module';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -23,13 +24,15 @@ import { UserModule } from './modules/user/user.module';
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.{entity,view}.{ts,js}'],
         migrations : [__dirname + '/migrations/*.{ts,js}'],
-        synchronize: false,
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
     { module: AuthModule, global: true },
     { module: ProductModule, global: true },
     { module: UserModule, global: true },
+    { module: CartModule, global: true },
+    { module: ProductModule, global: true }
   ],
   controllers: [],
   providers: [],

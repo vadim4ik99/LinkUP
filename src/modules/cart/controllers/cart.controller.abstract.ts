@@ -1,14 +1,13 @@
 import type { DeleteResult, UpdateResult } from 'typeorm';
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
-import type { ProductDTO } from '../../product/dto/product.dto';
 import type { CartDTO } from '../dto/cart.dto';
+import { IAddItemToCart } from '../interface/additem.interface';
 
 export abstract class CartControllerAbs {
 
   public abstract addItemToCart(
-    productId: ProductDTO,
+    payload: IAddItemToCart,
     user: IAuthUser,
-    quantity: number,
   ): Promise<UpdateResult | CartDTO>;
 
   public abstract getCart(user: IAuthUser): Promise<CartDTO[]>;

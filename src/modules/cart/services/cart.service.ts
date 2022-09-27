@@ -8,7 +8,6 @@ import type { CartEntity } from '../entities/cart.entity';
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { CartDTO } from '../dto/cart.dto';
 import type { DeleteResult , UpdateResult } from 'typeorm';
-import type { ProductDTO } from '../../product/dto/product.dto';
 
 @Injectable()
 export class CartServiceImpl extends CartService {
@@ -22,7 +21,8 @@ export class CartServiceImpl extends CartService {
   }
 
   public override async getCartsByUser(user: IAuthUser): Promise<CartDTO[]> {
-    const cart = this._cartRepository.findBy({ userId: user.id });
+    const cart = await this._cartRepository.find({
+      where: { user: { id: user.id } }, relations: ['user'] });
     if(!cart) { throw new NotFoundException(); }
     return cart;
   }
@@ -38,28 +38,28 @@ export class CartServiceImpl extends CartService {
   }
 
   public override async addItemToCart(
-    productId: ProductDTO,
+    productId: number,
     user: IAuthUser,
     quantity: number,
   ): Promise<UpdateResult | CartDTO> {
-    const product = await this._productService.getProduct(productId.id);
+    const product = await this._productService.getProduct(productId);
     if (!product) { throw new  NotFoundException(); }
 
-    const isProduct = await this.hasProduct(productId.id, user);
+    const isProduct = await this.hasProduct(productId, user);
     if (isProduct) {
       const cart = await this.getCartsByUser(user);
-      const quantity = cart[0]!.quantity += 1; // Forbidden non-null assertion.
-      const total = cart[0]!.total * quantity; // Forbidden non-null assertion.
+      const newQuantity = cart[0]!.quantity + quantity; // Forbidden non-null assertion.
+      const newTotal = cart[0]!.total * quantity; // Forbidden non-null assertion.
       return this._cartRepository.update(
         { id: cart[0]!.id },
-        { quantity, total },
+        { quantity: newQuantity, total:newTotal },
       );
     }
-
     const newItem = this._cartRepository.create();
-    newItem.productId = productId.id;
+    newItem.productId = product.id;
     newItem.userId = user.id;
-    newItem.total = productId.price * quantity;
+    newItem.quantity = quantity;
+    newItem.total = product.price * quantity;
     return this._cartRepository.save(newItem);
   }
 
