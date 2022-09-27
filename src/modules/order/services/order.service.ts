@@ -12,7 +12,6 @@ import type { OrderProductEntity } from '../../product/entities/order-product.en
 import type { OrderDTO } from '../dto/order.dto';
 import type { UpdateResult } from 'typeorm';
 
-
 @Injectable()
 export class OrderServiceImpl extends OrderService {
 
@@ -30,7 +29,7 @@ export class OrderServiceImpl extends OrderService {
 
   public override async order(user: IAuthUser): Promise<void> {
     const cartProductIds = await this._cartService.getItemsInCard(user);
-    if(!cartProductIds) {throw new BadRequestException()}
+    if(!cartProductIds) {throw new BadRequestException();}
     const authUser = await this._userService.findUser(user.email);
     if(!authUser) { throw new UnauthorizedException(); }
     await this._dataSource.transaction(async (manager) => {
@@ -45,7 +44,7 @@ export class OrderServiceImpl extends OrderService {
   public override async getAllOrders(user: IAuthUser): Promise<OrderDTO[]> {
     return this._orderRepository.find({
       where: { user: { id: user.id } },
-      relations: ['user']
+      relations: ['user'],
     });
   }
 

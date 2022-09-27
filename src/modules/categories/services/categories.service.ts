@@ -2,8 +2,9 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CategoryRepository } from '../repositories/categories.repository';
 import { CategoriesService } from './categories.service.abstract';
+import { CategoriesOutputDTO } from '../dto/categories.dto';
 
-import type { CategoriesDTO, CategoriesUpdateDTO } from '../dto/categories.dto';
+import type { CategoriesUpdateDTO , CategoriesInputDTO } from '../dto/categories.dto';
 import type { CategoriesEntity } from '../entities/categories.entity';
 import type { UpdateResult, DeleteResult } from 'typeorm';
 
@@ -17,7 +18,7 @@ export class CategoriesServiceImpl extends CategoriesService {
     super();
   }
 
-  public override async createCategory(createCategoryDto: CategoriesDTO): Promise<CategoriesDTO> {
+  public override async createCategory(createCategoryDto: CategoriesInputDTO): Promise<CategoriesOutputDTO> {
     return this._categoryRepository.save(createCategoryDto);
   }
 
@@ -31,10 +32,10 @@ export class CategoriesServiceImpl extends CategoriesService {
     return this._categoryRepository.delete({ id });
   }
 
-  public override async getCategoryById(id: number): Promise<CategoriesDTO | null> {
-    const category = this._categoryRepository.findOneBy({ id });
+  public override async getCategoryById(id: number): Promise<CategoriesOutputDTO> {
+    const category = await this._categoryRepository.findOneBy({ id });
     if (!category) { throw new NotFoundException('Can`t find category');}
-    return category;
+    return new CategoriesOutputDTO(category);
   }
 
 }

@@ -20,7 +20,7 @@ export class CreateProductDTO {
   @IsNotEmpty()
   public quantity!: number;
 
-  @IsString({each: true})
+  @IsString({ each: true })
   public categoryIds!: string[];
 
   @IsOptional()

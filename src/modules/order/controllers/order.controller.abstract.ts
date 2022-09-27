@@ -1,10 +1,7 @@
-import { OrderDTO } from '../dto/order.dto';
-
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { UpdateResult } from 'typeorm';
-import type { IChangeOrderStatus } from '../interface/change-order.interface';
-
-
+import type { ChangeOrderStatusDTO } from '../dto/change-order.dto';
+import type { OrderDTO } from '../dto/order.dto';
 
 export abstract class OrderControllerAbs {
 
@@ -12,6 +9,6 @@ export abstract class OrderControllerAbs {
 
   public abstract getAllOrders(user: IAuthUser): Promise<OrderDTO[]> ;
 
-  public abstract changeOrderStatus(payload: IChangeOrderStatus): Promise<UpdateResult>;
+  public abstract changeOrderStatus(payload: ChangeOrderStatusDTO): Promise<UpdateResult>;
 
 }

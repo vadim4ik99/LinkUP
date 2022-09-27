@@ -20,7 +20,7 @@ export abstract class ProductControllerAbs {
 
     public abstract getAllProduct(): Promise<ProductDTO[]>;
 
-    public abstract searchProducts(str: string): Promise<ProductDTO[] | null>;
+    public abstract searchProducts(str: string): Promise<ProductDTO[]>;
 
     public abstract getProductListByCategory(id: string): Promise<ProductDTO[] | null>
 

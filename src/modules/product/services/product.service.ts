@@ -1,16 +1,16 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductService } from './product.service.abstract';
 import { ProductRepository } from '../repositories/product.repository';
 import { CategoryProductRepository } from '../repositories/category-product.repository';
-import { Like, Repository , DataSource, UpdateResult } from 'typeorm';
+import { Like, Repository , DataSource } from 'typeorm';
 
 import type { ProductEntity } from '../entities/product.entity';
-import type { DeleteResult  } from 'typeorm';
+import type { DeleteResult  , UpdateResult } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { CategoryProductEntity } from '../entities/category-product.entity';
 import type { CreateProductDTO } from '../dto/create-product.dto';
-import { ProductOutDTO } from '../dto/product-output.dto';
+import type { ProductOutDTO } from '../dto/product-output.dto';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
@@ -43,29 +43,29 @@ export class ProductServiceImpl extends ProductService {
   }
 
   public override async editProduct(id: number, productUpdateDto: ProductUpdateDto): Promise<UpdateResult> {
-    const {categoryIds, ...other } = productUpdateDto;
+    const { categoryIds, ...other } = productUpdateDto;
     const product = await this.getProduct(id);
+    if(!product) { throw new NotFoundException(); }
     const categoryProducts = await this._categoryProductsRepository.find({
       where: { product: { id: id } }, relations: ['category'] });
     const arrIds = categoryProducts.map(categoryId =>(categoryId.categoryId));
     const inputIds = categoryIds.map(item => +item);
-    if(inputIds == arrIds) {return this._productRepository.update({ id: product?.id }, { ...other})}
-    else {
+    if(inputIds == arrIds) {return this._productRepository.update({ id: product?.id }, { ...other });} else {
       arrIds.forEach(element => {
-        this._categoryProductsRepository.delete({ id: element })  
+        this._categoryProductsRepository.delete({ id: element });
       });
-      const productUpdate = await this._productRepository.update({ id: product?.id }, { ...other});
+      const productUpdate = await this._productRepository.update({ id: product?.id }, { ...other });
       const result = await this._categoryProductsRepository.create(
         categoryIds.map(categoryId => ({ productUpdate, category: { id: +categoryId } })));
       await this._categoryProductsRepository.save(result);
       return productUpdate;
     }
-    
- }
+  }
 
   public override async deleteProduct(id: number): Promise<DeleteResult> {
-    const categoryProducts = await this._categoryProductsRepository.find({
+    const categoryProducts = await this._categoryProductsRepository.findOne({
       where: { product: { id: id } }, relations: ['category'] });
+    if(!categoryProducts) { throw new ForbiddenException(); }
     await this._categoryProductsRepository.remove(categoryProducts);
     return this._productRepository.delete({ id });
   }
@@ -84,15 +84,15 @@ export class ProductServiceImpl extends ProductService {
     return result;
   }
 
-  public override async searchProducts(str: string): Promise<ProductDTO[] | null> {
-    const result = await this._productRepository.findBy({
-      title: Like(`%${str}%`), //don`t work
+  public override async searchProducts(str: string): Promise<ProductDTO[]> {
+    const result = await this._productRepository.find({
+      where: { title: Like(`%${str}%`) },
     });
     return result;
   }
 
   public override async getAllProduct(): Promise<ProductDTO[]> {
-    const products = this._productRepository.find();
+    const products = await this._productRepository.find();
     return products;
   }
 

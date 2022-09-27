@@ -16,7 +16,7 @@ export abstract class ProductService {
 
     public abstract getProductListByCategory(id: number): Promise<ProductDTO[] | null>;
 
-    public abstract searchProducts(str: string): Promise<ProductDTO[] | null>;
+    public abstract searchProducts(str: string): Promise<ProductDTO[]>;
 
     public abstract getAllProduct(): Promise<ProductDTO[]>
 

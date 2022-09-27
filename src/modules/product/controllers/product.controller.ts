@@ -45,7 +45,7 @@ export class ProductController extends ProductControllerAbs {
   }
 
   @Get('/search/')
-  public override async searchProducts(@Query() str: string): Promise<ProductDTO[] | null> {
+  public override async searchProducts(@Query() str: string): Promise<ProductDTO[]> {
     return this._productServise.searchProducts(str);
   }
 

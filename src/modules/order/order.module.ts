@@ -24,7 +24,7 @@ const orderService = { provide: OrderService, useClass: OrderServiceImpl };
   imports: [
     UserModule,
     CartModule,
-    TypeOrmModule.forFeature([OrderEntity])
+    TypeOrmModule.forFeature([OrderEntity]),
   ],
   controllers: [OrderController],
   providers: [orderService, orderRepository],

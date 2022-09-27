@@ -3,11 +3,11 @@ import { AuthUser, IAuthUser } from '../../../@framework/decorators/auth.decorat
 import { OrderControllerAbs } from './order.controller.abstract';
 import { OrderService } from '../services/order.service.abstract';
 import { JwtGuard } from '../../../@framework/guard/jwt.guard';
-import { IChangeOrderStatus } from '../interface/change-order.interface';
-import { OrderDTO } from '../dto/order.dto';
+import { ChangeOrderStatusDTO } from '../dto/change-order.dto';
 import { Authorization } from '../../../@framework/decorators/authorization.decorator';
 
 import type { UpdateResult } from 'typeorm';
+import type { OrderDTO } from '../dto/order.dto';
 
 @Controller('order')
 export class OrderController extends OrderControllerAbs {
@@ -33,7 +33,7 @@ export class OrderController extends OrderControllerAbs {
   @Authorization(['vendor'])
   @UseGuards(JwtGuard)
   @Post('/change')
-  public override async changeOrderStatus(@Body() payload: IChangeOrderStatus ): Promise<UpdateResult> {
+  public override async changeOrderStatus(@Body() payload: ChangeOrderStatusDTO ): Promise<UpdateResult> {
     return this._orderService.changeOrderStatus(payload.orderId, payload.status);
   }
 

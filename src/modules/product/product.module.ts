@@ -62,6 +62,6 @@ const productService = {
     productService,
     productRepository,
     categoryProductRepository,
-    orderProductRepository]
+    orderProductRepository],
 })
 export class ProductModule {}

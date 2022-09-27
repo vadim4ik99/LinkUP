@@ -22,7 +22,7 @@ const cartService = { provide: CartService, useClass: CartServiceImpl };
 @Module({
   imports: [
     ProductModule,
-    TypeOrmModule.forFeature([CartEntity])
+    TypeOrmModule.forFeature([CartEntity]),
   ],
   controllers: [CartController],
   providers: [cartService, cartRepository],

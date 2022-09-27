@@ -1,4 +1,4 @@
-import { CartEntity } from "../../../modules/cart/entities/cart.entity";
+import type { CartEntity } from '../../../modules/cart/entities/cart.entity';
 
 export class ProductOutDTO {
 

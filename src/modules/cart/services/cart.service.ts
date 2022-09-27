@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CartRepository } from '../repositories/cart.repository';
 import { CartService } from './cart.service.abstract';
@@ -17,7 +17,7 @@ export class CartServiceImpl extends CartService {
     @Inject(CartRepository)
     private readonly _cartRepository: Repository<CartEntity>,
     private readonly _productService: ProductService,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
   ) {
     super();
   }
@@ -29,11 +29,11 @@ export class CartServiceImpl extends CartService {
     return cart;
   }
 
-  public override async deleteCart(user: IAuthUser): Promise<CartDTO[]> {
+  public override async deleteCart(user: IAuthUser): Promise<void> {
     const carts = await this._cartRepository.find({
-      where: { user: { id: user.id } }, relations: ['user']
-    })
-    return this._cartRepository.remove(carts);
+      where: { user: { id: user.id } }, relations: ['user'],
+    });
+    this._cartRepository.remove(carts);
   }
 
   public override async hasProduct (productId: number, user: IAuthUser): Promise<boolean> {
@@ -53,10 +53,11 @@ export class CartServiceImpl extends CartService {
     const isProduct = await this.hasProduct(productId, user);
     if (isProduct) {
       const cart = await this._cartRepository.find({
-        where: { product: { id: productId} },
+        where: { product: { id: productId } },
         relations: ['product'],
       });
-      const newQuantity = cart[0]!.quantity + quantity; 
+      if(!cart) { throw new ForbiddenException(); }
+      const newQuantity = cart[0]!.quantity + quantity;
       const newTotal = cart[0]!.total * quantity;
       return this._cartRepository.update(
         { id: cart[0]!.id },

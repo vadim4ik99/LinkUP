@@ -34,7 +34,7 @@ import { OrderModule } from './modules/order/order.module';
     { module: UserModule, global: true },
     { module: CartModule, global: true },
     { module: ProductModule, global: true },
-    { module: OrderModule, global: true }
+    { module: OrderModule, global: true },
   ],
   controllers: [],
   providers: [],

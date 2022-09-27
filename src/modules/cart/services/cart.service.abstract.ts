@@ -12,7 +12,7 @@ export abstract class CartService {
 
   public abstract getCartsByUser(user: IAuthUser): Promise<CartDTO[]>;
 
-  public abstract deleteCart(user: IAuthUser): Promise<CartDTO[]>;
+  public abstract deleteCart(user: IAuthUser): Promise<void>;
 
   public abstract hasProduct(productId: number, user: IAuthUser): Promise<boolean>;
 

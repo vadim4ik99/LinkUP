@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm"
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class DeleteRowOrderProduct1664278446199 implements MigrationInterface {
 
