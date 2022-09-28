@@ -54,7 +54,7 @@ export class ProductServiceImpl extends ProductService {
       arrIds.forEach(element => {
         this._categoryProductsRepository.delete({ id: element });
       });
-      const productUpdate = await this._productRepository.update({ id: product?.id }, { ...other });
+      const productUpdate = await this._productRepository.update({ id: product.id }, { ...other });
       const result = await this._categoryProductsRepository.create(
         categoryIds.map(categoryId => ({ productUpdate, category: { id: +categoryId } })));
       await this._categoryProductsRepository.save(result);

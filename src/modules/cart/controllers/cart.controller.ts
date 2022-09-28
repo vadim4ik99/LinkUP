@@ -27,7 +27,7 @@ export class CartController extends CartControllerAbs {
   @UseGuards(JwtGuard)
   @Delete('/')
   public override async deleteCart(@AuthUser() user: IAuthUser): Promise<void> {
-    return await this._cartService.deleteCart(user);
+    return this._cartService.deleteCart(user);
   }
 
   @UseGuards(JwtGuard)
