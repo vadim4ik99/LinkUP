@@ -22,6 +22,6 @@ export abstract class ProductService {
 
     public abstract getAllProduct(): Promise<ProductDTO[]>;
 
-    public abstract pagination(sort: BySortEnum, page: number): Promise<PaginationDTO>;
+    public abstract pagination(sort?: BySortEnum, page?: number): Promise<PaginationDTO>;
 
 }

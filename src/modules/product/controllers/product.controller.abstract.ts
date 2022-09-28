@@ -4,7 +4,7 @@ import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductDTO } from '../dto/product.dto';
 import type { PaginationDTO } from '../dto/pagination-result.dto';
-import { BySortEnum } from 'src/@framework/bysort.enum';
+import type { BySortEnum } from 'src/@framework/bysort.enum';
 
 export abstract class ProductControllerAbs {
 

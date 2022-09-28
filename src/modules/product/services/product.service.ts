@@ -98,8 +98,8 @@ export class ProductServiceImpl extends ProductService {
     return products;
   }
 
-  public override async pagination(sort: BySortEnum, page: number): Promise<PaginationDTO> {
-    const builder = await this._productRepository.createQueryBuilder('products');
+  public override async pagination(sort?: BySortEnum, page?: number): Promise<PaginationDTO> {
+    const builder = this._productRepository.createQueryBuilder('products');
     if (sort) {
       builder.orderBy(sort);
     }
@@ -108,9 +108,9 @@ export class ProductServiceImpl extends ProductService {
     const total = await builder.getCount();
     builder.offset((corentPage - 1) * perPage).limit(perPage);
     return {
-      data: await builder.getMany(),
+      data: await builder.getMany(), // have promblem with dto
       total,
-      page,
+      corentPage,
       lastPage: Math.ceil(total / perPage),
     };
 
