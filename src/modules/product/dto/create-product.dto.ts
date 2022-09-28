@@ -1,10 +1,6 @@
 import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-export class ProductDTO {
-
-  @IsInt()
-  @IsNotEmpty()
-  public id!: number;
+export class CreateProductDTO {
 
   @IsString()
   @IsNotEmpty()
@@ -20,13 +16,12 @@ export class ProductDTO {
   @IsString()
   public descriptionFull!: string;
 
-  @IsOptional()
-  @IsInt()
-  public sold?: number;
-
   @IsInt()
   @IsNotEmpty()
   public quantity!: number;
+
+  @IsString({ each: true })
+  public categoryIds!: string[];
 
   @IsOptional()
   @IsInt()

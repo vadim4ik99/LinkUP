@@ -1,5 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { CartModule } from '../cart/cart.module';
+import { UserModule } from '../user/user.module';
 import { OrderController } from './controllers/order.controller';
 import { OrderEntity } from './entities/order.entity';
 import {
@@ -11,14 +14,18 @@ import { OrderService } from './services/order.service.abstract';
 
 const orderRepository = {
   provide: OrderRepository,
-  inject: ['DATA_SOURCE'],
+  inject: [DataSource],
   useFactory: orderRepositoryFactory,
 };
 
 const orderService = { provide: OrderService, useClass: OrderServiceImpl };
 
 @Module({
-  imports: [TypeOrmModule.forFeature([OrderEntity])],
+  imports: [
+    UserModule,
+    CartModule,
+    TypeOrmModule.forFeature([OrderEntity]),
+  ],
   controllers: [OrderController],
   providers: [orderService, orderRepository],
 })

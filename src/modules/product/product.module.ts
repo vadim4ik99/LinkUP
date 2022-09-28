@@ -58,5 +58,10 @@ const productService = {
     categoryProductRepository,
     orderProductRepository,
   ],
+  exports: [
+    productService,
+    productRepository,
+    categoryProductRepository,
+    orderProductRepository],
 })
 export class ProductModule {}

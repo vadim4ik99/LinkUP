@@ -6,7 +6,6 @@ import path from 'path';
 
 import type { SentMessageInfo } from 'nodemailer';
 
-
 export enum EmailTamplate {
   Welcome = 'welcome',
   ForgotPassword = 'password',

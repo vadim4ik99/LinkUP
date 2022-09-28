@@ -106,4 +106,11 @@ export class AuthServiceImpl extends AuthService {
     return token;
   }
 
+  public override async logOut( user: IAuthUser): Promise<boolean> {
+    const expiresIn = { expiresIn: '1s' };
+    const token = await this._jwtService.signAsync(user.email, expiresIn);
+    if(token) { return true; }
+    return false;
+  }
+
 }

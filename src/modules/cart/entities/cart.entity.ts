@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   RelationId,
+  Column,
 } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
 
@@ -26,6 +27,12 @@ export class CartEntity {
 
   @RelationId((cart: CartEntity) => cart.user)
   public userId!: number;
+
+  @Column({ default: 1 })
+  public quantity!: number;
+
+  @Column()
+  public total!: number;
 
   @CreateDateColumn()
   public createdAt!: Date;

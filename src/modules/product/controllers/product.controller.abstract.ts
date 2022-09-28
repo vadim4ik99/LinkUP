@@ -1,12 +1,12 @@
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { DeleteResult, UpdateResult } from 'typeorm';
-import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
-import type { ProductEntity } from '../entities/product.entity';
+import type { CreateProductDTO } from '../dto/create-product.dto';
+import type { ProductDTO } from '../dto/product.dto';
 
 export abstract class ProductControllerAbs {
 
-    public abstract createProduct(_user: IAuthUser, createProductDto: ProductDTO): Promise<ProductDTO>;
+    public abstract createProduct(_user: IAuthUser, createProductDto: CreateProductDTO): Promise<void>;
 
     public abstract editProduct(
         _user: IAuthUser,
@@ -16,6 +16,12 @@ export abstract class ProductControllerAbs {
 
     public abstract deleteProduct(_user: IAuthUser, id: number): Promise<DeleteResult>;
 
-    public abstract getProduct(id: number): Promise<ProductEntity | null>;
+    public abstract getProduct(id: number): Promise<ProductDTO | null>;
+
+    public abstract getAllProduct(): Promise<ProductDTO[]>;
+
+    public abstract searchProducts(str: string): Promise<ProductDTO[]>;
+
+    public abstract getProductListByCategory(id: string): Promise<ProductDTO[] | null>
 
 }

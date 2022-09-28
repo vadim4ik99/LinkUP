@@ -1,12 +1,25 @@
-import { IsInt, IsNotEmpty } from 'class-validator';
+import { IsInt } from 'class-validator';
 
 export class CartDTO {
 
-  @IsInt()
-  @IsNotEmpty()
   public id!: number;
 
-  @IsInt()
   public userId!: number;
+
+  public productId!: number;
+
+  public quantity!: number;
+
+  public total!: number;
+
+}
+
+export class CartUpdateProductDTO {
+
+  @IsInt()
+  public quantity!: number;
+
+  @IsInt()
+  public total!: number;
 
 }

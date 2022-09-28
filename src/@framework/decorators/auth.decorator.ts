@@ -5,6 +5,7 @@ import type { Request } from 'express';
 import type { UserType } from './authorization.decorator';
 
 export interface IAuthUser {
+  id: number;
   email: string;
   role: UserType;
 }

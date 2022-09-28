@@ -2,7 +2,6 @@ import { OrderEntity } from '../../order/entities/order.entity';
 import { ProductEntity } from './product.entity';
 import {
   Entity,
-  Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   ManyToOne,
@@ -14,12 +13,6 @@ export class OrderProductEntity {
 
   @PrimaryGeneratedColumn()
   public id!: number;
-
-  @Column()
-  public cost!: number;
-
-  @Column()
-  public quantity!: number;
 
   @ManyToOne(() => ProductEntity, (product) => product.orderProducts)
   public product!: ProductEntity;
