@@ -11,6 +11,8 @@ import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { CategoryProductEntity } from '../entities/category-product.entity';
 import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductOutDTO } from '../dto/product-output.dto';
+import type { PaginationDTO } from '../dto/pagination-result.dto';
+import type { BySortEnum } from 'src/@framework/bysort.enum';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
@@ -94,6 +96,24 @@ export class ProductServiceImpl extends ProductService {
   public override async getAllProduct(): Promise<ProductDTO[]> {
     const products = await this._productRepository.find();
     return products;
+  }
+
+  public override async pagination(sort: BySortEnum, page: number): Promise<PaginationDTO> {
+    const builder = await this._productRepository.createQueryBuilder('products');
+    if (sort) {
+      builder.orderBy(sort);
+    }
+    const corentPage = page || 1;
+    const perPage = 10;
+    const total = await builder.getCount();
+    builder.offset((corentPage - 1) * perPage).limit(perPage);
+    return {
+      data: await builder.getMany(),
+      total,
+      page,
+      lastPage: Math.ceil(total / perPage),
+    };
+
   }
 
 }
