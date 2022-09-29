@@ -2,11 +2,11 @@ import type { ProductDTO } from './product.dto';
 
 export class PaginationDTO {
 
-  public data!: Promise<ProductDTO[]>;
+  public data!: ProductDTO[];
 
   public total!: number;
 
-  public page!: number;
+  public corentPage!: number;
 
   public lastPage!: number;
 

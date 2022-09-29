@@ -12,7 +12,7 @@ import type { CategoryProductEntity } from '../entities/category-product.entity'
 import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductOutDTO } from '../dto/product-output.dto';
 import type { PaginationDTO } from '../dto/pagination-result.dto';
-import type { BySortEnum } from 'src/@framework/bysort.enum';
+import { BySortEnum } from 'src/@framework/bysort.enum';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
@@ -98,20 +98,21 @@ export class ProductServiceImpl extends ProductService {
     return products;
   }
 
-  public override async pagination(sort?: BySortEnum, page?: number): Promise<PaginationDTO> {
-    const builder = this._productRepository.createQueryBuilder('products');
-    if (sort) {
-      builder.orderBy(sort);
-    }
+  public override async getListProducts(
+    sort: BySortEnum = BySortEnum.DESC,
+    page?: number,
+    take: number = 10,
+    categoryIds?: string[],
+  ): Promise<PaginationDTO> {
     const corentPage = page || 1;
-    const perPage = 10;
-    const total = await builder.getCount();
-    builder.offset((corentPage - 1) * perPage).limit(perPage);
+    const categoryIntIds = categoryIds?.map(string => +string);
+    const products = await this._productRepository.getAllProducts(sort, corentPage, take, categoryIntIds);
+    const total = await products.getCount();
     return {
-      data: await builder.getMany(), // have promblem with dto
+      data: products,
       total,
       corentPage,
-      lastPage: Math.ceil(total / perPage),
+      lastPage: Math.ceil(total / take),
     };
 
   }

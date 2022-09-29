@@ -68,7 +68,7 @@ export class ProductController extends ProductControllerAbs {
     @Query('sort') sort: BySortEnum,
     @Query('page') page: number,
   ): Promise<PaginationDTO> {
-    return this._productServise.pagination(sort, page);
+    return this._productServise.getListProducts(sort, page);
   }
 
   @Get('/category/:id')

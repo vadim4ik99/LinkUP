@@ -4,7 +4,7 @@ import type { ProductOutDTO } from '../dto/product-output.dto';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { PaginationDTO } from '../dto/pagination-result.dto';
-import type { BySortEnum } from 'src/@framework/bysort.enum';
+import { BySortEnum } from 'src/@framework/bysort.enum';
 
 export abstract class ProductService {
 
@@ -22,6 +22,11 @@ export abstract class ProductService {
 
     public abstract getAllProduct(): Promise<ProductDTO[]>;
 
-    public abstract pagination(sort?: BySortEnum, page?: number): Promise<PaginationDTO>;
+    public abstract getListProducts(
+        sort?: BySortEnum,
+        page?: number,
+        take?: number,
+        categoryIds?: string[]
+    ): Promise<PaginationDTO>;
 
 }
