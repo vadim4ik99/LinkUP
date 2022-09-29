@@ -3,21 +3,23 @@ import { ProductService } from './product.service.abstract';
 import { ProductRepository } from '../repositories/product.repository';
 import { CategoryProductRepository } from '../repositories/category-product.repository';
 import { Like, Repository , DataSource } from 'typeorm';
+import { BySortEnum } from 'src/@framework/bysort.enum';
+import { IProductRepository } from '../interfaces/product.repository.interface';
 
-import type { ProductEntity } from '../entities/product.entity';
 import type { DeleteResult  , UpdateResult } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { CategoryProductEntity } from '../entities/category-product.entity';
 import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductOutDTO } from '../dto/product-output.dto';
+import type { PaginationDTO } from '../dto/pagination-result.dto';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
 
   constructor(
     @Inject(ProductRepository)
-    private readonly _productRepository: Repository<ProductEntity>,
+    private readonly _productRepository: IProductRepository,
     @Inject(CategoryProductRepository)
     private readonly _categoryProductsRepository: Repository<CategoryProductEntity>,
     private readonly _dataSource: DataSource,
@@ -94,6 +96,25 @@ export class ProductServiceImpl extends ProductService {
   public override async getAllProduct(): Promise<ProductDTO[]> {
     const products = await this._productRepository.find();
     return products;
+  }
+
+  public override async getListProducts(
+    categoryIds: string[],
+    sort: BySortEnum = BySortEnum.DESC,
+    page?: number,
+    take: number = 10,
+  ): Promise<PaginationDTO> {
+    const corentPage = page || 1;
+    const categoryIntIds = categoryIds?.map(string => +string);
+    const products = await this._productRepository.getAllProducts(sort, corentPage, take, categoryIntIds);
+    const total = await products.getCount();
+    return {
+      data: products,
+      total,
+      corentPage,
+      lastPage: Math.ceil(total / take),
+    };
+
   }
 
 }

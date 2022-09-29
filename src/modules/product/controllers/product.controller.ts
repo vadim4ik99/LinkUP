@@ -5,9 +5,11 @@ import { ProductUpdateDto } from '../dto/productUpdate.dto';
 import { AuthUser, IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import { Authorization } from '../../../@framework/decorators/authorization.decorator';
 import { CreateProductDTO } from '../dto/create-product.dto';
+import { BySortEnum } from '../../../@framework/bysort.enum';
 
 import type { DeleteResult, UpdateResult } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
+import type { PaginationDTO } from '../dto/pagination-result.dto';
 
 @Controller('product')
 export class ProductController extends ProductControllerAbs {
@@ -59,6 +61,14 @@ export class ProductController extends ProductControllerAbs {
   public override async getAllProduct(
   ): Promise<ProductDTO[]> {
     return this._productServise.getAllProduct();
+  }
+
+  @Get('/all')
+  public override async pagination(
+    @Query('sort') sort: BySortEnum,
+    @Query('page') page: number,
+  ): Promise<PaginationDTO> {
+    return this._productServise.getListProducts(sort, page);
   }
 
   @Get('/category/:id')

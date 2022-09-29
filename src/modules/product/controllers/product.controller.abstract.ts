@@ -3,6 +3,8 @@ import type { DeleteResult, UpdateResult } from 'typeorm';
 import type { ProductUpdateDto } from '../dto/productUpdate.dto';
 import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductDTO } from '../dto/product.dto';
+import type { PaginationDTO } from '../dto/pagination-result.dto';
+import type { BySortEnum } from 'src/@framework/bysort.enum';
 
 export abstract class ProductControllerAbs {
 
@@ -22,6 +24,8 @@ export abstract class ProductControllerAbs {
 
     public abstract searchProducts(str: string): Promise<ProductDTO[]>;
 
-    public abstract getProductListByCategory(id: string): Promise<ProductDTO[] | null>
+    public abstract getProductListByCategory(id: string): Promise<ProductDTO[] | null>;
+
+    public abstract pagination(sort: BySortEnum, page: number): Promise<PaginationDTO>;
 
 }
