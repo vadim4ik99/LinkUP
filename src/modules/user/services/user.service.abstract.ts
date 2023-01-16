@@ -1,6 +1,7 @@
 import type { IAuthUser } from 'src/@framework/decorators/auth.decorator';
 import type { UpdateResult } from 'typeorm';
 import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
+import type { ImageNameDTO } from '../dto/user-avatar.dto ';
 import type { UserEmailDTO } from '../dto/user-email.dto';
 import type { UserPasswordDTO } from '../dto/user-password.dto';
 import type { UserProfileDTO } from '../dto/user-profile.dto';
@@ -22,5 +23,9 @@ export abstract class UserService {
   ): Promise<UpdateResult>;
 
   public abstract editProfile(userDto: UserProfileDTO): Promise<UpdateResult>;
+
+  public abstract updateAvatar(user: IAuthUser, userAvatar: ImageNameDTO): Promise<UpdateResult>;
+
+  public abstract getUserInfo(user: IAuthUser): Promise<UserEntity | null>;
 
 }

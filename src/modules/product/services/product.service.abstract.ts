@@ -23,10 +23,10 @@ export abstract class ProductService {
     public abstract getAllProduct(): Promise<ProductDTO[]>;
 
     public abstract getListProducts(
-        categoryIds: string[],
-        sort?: BySortEnum,
-        page?: number,
-        take?: number,
+        sort: BySortEnum,
+        page: number,
+        take: number,
+        categoryIds?: string,
     ): Promise<PaginationDTO>;
 
 }

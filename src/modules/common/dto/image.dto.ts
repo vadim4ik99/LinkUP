@@ -1,5 +1,4 @@
-import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
-import { ImageType } from '../entities/images.entity';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class FileDTO {
 
@@ -13,7 +12,5 @@ export class FileDTO {
   @IsInt()
   public size!: number;
 
-  @IsEnum(ImageType)
-  public type!: ImageType;
 
 }

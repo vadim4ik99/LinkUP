@@ -9,8 +9,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-  ManyToOne,
-  RelationId,
 } from 'typeorm';
 
 @Entity()
@@ -46,11 +44,11 @@ export class ProductEntity {
   @OneToMany(() => OrderProductEntity, (orderProd) => orderProd.product)
   public orderProducts?: OrderProductEntity[];
 
-  @ManyToOne(() => FileEntity, (image) => image.products)
-  public image?: FileEntity;
+  @OneToMany(() => FileEntity, (image) => image.product)
+  public images?: FileEntity[];
 
-  @RelationId((product: ProductEntity) => product.image)
-  public imageId?: number;
+  // @RelationId((product: ProductEntity) => product.image)
+  // public imageId?: number;
 
   @CreateDateColumn()
   public createdAt!: Date;

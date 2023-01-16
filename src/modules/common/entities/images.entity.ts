@@ -6,18 +6,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
+  ManyToOne,
+  RelationId,
 } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity';
-
-export enum ImageType {
-  GIF = 'gif',
-  JPEG = 'jpeg',
-  PJPEG = 'pjpeg',
-  PNG = 'png',
-  SVG = 'svg+xml',
-  TIFF = 'tiff',
-  WEBP = 'webp',
-}
 
 @Entity()
 export class FileEntity {
@@ -31,17 +23,17 @@ export class FileEntity {
   @Column()
   public size!: number;
 
-  @Column({ type: 'enum', enum: ImageType })
-  public type!: ImageType;
+  @ManyToOne(() => ProductEntity, (product) => product.images)
+  public product?: ProductEntity;
 
-  @OneToMany(() => ProductEntity, (product) => product.image)
-  public products!: ProductEntity[];
+  @RelationId((image: FileEntity) => image.product)
+  public product_id?: number;
 
   @OneToMany(() => CategoriesEntity, (category) => category.image)
-  public categories!: CategoriesEntity[];
+  public categories?: CategoriesEntity[];
 
   @OneToMany(() => UserEntity, (user) => user.avatar)
-  public users!: CategoriesEntity[];
+  public users?: UserEntity[];
 
   @CreateDateColumn()
   public createdAt!: Date;

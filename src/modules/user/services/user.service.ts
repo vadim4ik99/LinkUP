@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { UserService } from './user.service.abstract';
 import { genSalt, hash } from 'bcrypt';
+import * as fs from 'fs';
+import { CommonService } from 'src/modules/common/services/common.service.abstract';
 
 import type { UserEntity } from '../entities/user.entity';
 import { Repository, type UpdateResult } from 'typeorm';
@@ -11,6 +13,7 @@ import type { CreateUserResponseDto } from '../dto/create-user-response.dto';
 import type { IAuthUser } from '../../../@framework/decorators/auth.decorator';
 import type { UserPasswordDTO } from '../dto/user-password.dto';
 import type { UserProfileDTO } from '../dto/user-profile.dto';
+import type { ImageNameDTO } from '../dto/user-avatar.dto ';
 
 @Injectable()
 export class UserServiceImpl extends UserService {
@@ -18,6 +21,7 @@ export class UserServiceImpl extends UserService {
   constructor(
     @Inject(UserRepository)
     private readonly _usersRepository: Repository<UserEntity>,
+    private readonly _commonService: CommonService,
   ) {
     super();
   }
@@ -74,6 +78,21 @@ export class UserServiceImpl extends UserService {
   public override async editProfile(userDto: UserProfileDTO): Promise<UpdateResult> {
     const { id, firstName, lastName } = userDto;
     return this._usersRepository.update({ id }, { firstName, lastName });
+  }
+
+  public override async updateAvatar(user: IAuthUser, userAvatar: ImageNameDTO): Promise<UpdateResult> {
+    const path = './uploads/' + userAvatar.filename;
+    if(!fs.existsSync(path)) {
+      throw new NotFoundException('No such file');
+    }
+    const files = await this._commonService.getImageByName(path);
+    console.log(files);
+    if(!files) { throw new NotFoundException('No such file in DB'); }
+    return await this._usersRepository.update({ id : user.id }, { avatar: files } );
+  }
+
+  public override async getUserInfo(user: IAuthUser): Promise<UserEntity | null> {
+    return this._usersRepository.findOne({ where: { id: user.id }, relations: ['avatar'] });
   }
 
 }

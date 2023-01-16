@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm/';
+import { DataSource } from 'typeorm';
 import { CategoriesController } from './controllers/categories.controller';
 import { CategoriesEntity } from './entities/categories.entity';
 import {
@@ -11,7 +12,7 @@ import { CategoriesService } from './services/categories.service.abstract';
 
 const categoryRepository = {
   provide: CategoryRepository,
-  inject: ['DATA_SOURCE'],
+  inject: [DataSource],
   useFactory: categoryRepositoryFactory,
 };
 

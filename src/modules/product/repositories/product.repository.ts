@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 import { ProductEntity } from '../entities/product.entity';
 
 import type { BySortEnum } from 'src/@framework/bysort.enum';
 import type { DataSource } from 'typeorm';
 import type { IProductRepository } from '../../product/interfaces/product.repository.interface';
+import type { ProductDTO } from '../dto/product.dto';
 
 export const ProductRepository = Symbol('PRODUCT_REPOSITORY');
 
@@ -10,24 +12,28 @@ export const productRepositoryFactory = (
   dataSource: DataSource,
 ): IProductRepository =>
   dataSource.getRepository(ProductEntity).extend<IProductRepository>({
-
     async getAllProducts(
       sort: BySortEnum,
       page: number,
       take: number,
-      categoryIds: number[],
-    ): Promise<ProductEntity[]> { //must be Promise<[ProductEntity[], number]> to also get general count
-      const hasCategories = categoryIds.length > 0;
-
+      categoryIds: string,
+    ): Promise<[ProductDTO[], number]> {
+      const arrCategoryIds = categoryIds.split(',').map(Number);
+      const hasCategories = arrCategoryIds.length > 0;
       const builder = this.createQueryBuilder('product');
-      const result = await builder.leftJoin('categoryProducts', 'cp')
-        .where(hasCategories ? 'cp.id = any(:categoryIds)' : '', categoryIds)
-        .orderBy('createdAt', sort)
+      const result = await builder.leftJoin('product.categoryProducts', 'cp')
+        .where(hasCategories ? 'cp.category IN (:...ids)' : '', { ids: arrCategoryIds })
+        .orderBy('product.createdAt', sort)
         .skip((page - 1) * take)
         .take(take)
         .getMany();
 
-      return result;
+      const qb = this.createQueryBuilder('product');
+      const count = await qb.leftJoin('product.categoryProducts', 'cp')
+        .where(hasCategories ? 'cp.category IN (:...ids)' : '', { ids: arrCategoryIds })
+        .getCount();
+
+      return [result, count];
     },
   } as IProductRepository);
 

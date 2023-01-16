@@ -6,6 +6,8 @@ import { ProductModule } from './modules/product/product.module';
 import { UserModule } from './modules/user/user.module';
 import { CartModule } from './modules/cart/cart.module';
 import { OrderModule } from './modules/order/order.module';
+import { CommonModule } from './modules/common/common.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { OrderModule } from './modules/order/order.module';
     { module: CartModule, global: true },
     { module: ProductModule, global: true },
     { module: OrderModule, global: true },
+    { module: CommonModule, global: true },
+    { module: CategoriesModule, global: true },
   ],
   controllers: [],
   providers: [],

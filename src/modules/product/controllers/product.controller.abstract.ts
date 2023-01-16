@@ -5,6 +5,7 @@ import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductDTO } from '../dto/product.dto';
 import type { PaginationDTO } from '../dto/pagination-result.dto';
 import type { BySortEnum } from 'src/@framework/bysort.enum';
+import { SetImagesToProductDTO } from '../dto/imagest-to-product.dto';
 
 export abstract class ProductControllerAbs {
 
@@ -26,6 +27,13 @@ export abstract class ProductControllerAbs {
 
     public abstract getProductListByCategory(id: string): Promise<ProductDTO[] | null>;
 
-    public abstract pagination(sort: BySortEnum, page: number): Promise<PaginationDTO>;
+    public abstract setImagesToProduct(id: number, data: SetImagesToProductDTO): Promise<Promise<UpdateResult>[]> ;
+
+    public abstract getListProducts(
+      categoryIds?: string,
+      sort?: BySortEnum,
+      page?: number,
+      take?: number,
+    ): Promise<PaginationDTO>;
 
 }

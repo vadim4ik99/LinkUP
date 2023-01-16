@@ -1,9 +1,9 @@
+/* eslint-disable no-console */
 import { BadRequestException, ForbiddenException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ProductService } from './product.service.abstract';
 import { ProductRepository } from '../repositories/product.repository';
 import { CategoryProductRepository } from '../repositories/category-product.repository';
 import { Like, Repository , DataSource } from 'typeorm';
-import { BySortEnum } from 'src/@framework/bysort.enum';
 import { IProductRepository } from '../interfaces/product.repository.interface';
 
 import type { DeleteResult  , UpdateResult } from 'typeorm';
@@ -13,6 +13,7 @@ import type { CategoryProductEntity } from '../entities/category-product.entity'
 import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductOutDTO } from '../dto/product-output.dto';
 import type { PaginationDTO } from '../dto/pagination-result.dto';
+import type { BySortEnum } from 'src/@framework/bysort.enum';
 
 @Injectable()
 export class ProductServiceImpl extends ProductService {
@@ -74,7 +75,7 @@ export class ProductServiceImpl extends ProductService {
 
   public override async getProduct(id: number): Promise<ProductOutDTO | null> {
     const product = await this._productRepository.findOne({
-      where: { id: id }, relations: ['categoryProducts'] });
+      where: { id: id }, relations: ['categoryProducts','images'] });
     if (!product) { throw new BadRequestException('Can`t find product with this id');}
     return product;
   }
@@ -99,22 +100,20 @@ export class ProductServiceImpl extends ProductService {
   }
 
   public override async getListProducts(
-    categoryIds: string[],
-    sort: BySortEnum = BySortEnum.DESC,
-    page?: number,
-    take: number = 10,
+    sort: BySortEnum,
+    page: number,
+    take: number,
+    categoryIds?: string,
   ): Promise<PaginationDTO> {
-    const corentPage = page || 1;
-    const categoryIntIds = categoryIds?.map(string => +string);
-    const products = await this._productRepository.getAllProducts(sort, corentPage, take, categoryIntIds);
-    const total = await products.getCount();
+
+    const products = await this._productRepository.getAllProducts(sort, page, take, categoryIds);
+    const total = products[1]; //why 1?
     return {
-      data: products,
+      data: products[0],
       total,
-      corentPage,
+      page,
       lastPage: Math.ceil(total / take),
     };
-
   }
 
 }

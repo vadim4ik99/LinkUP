@@ -6,7 +6,7 @@ export class PaginationDTO {
 
   public total!: number;
 
-  public corentPage!: number;
+  public page!: number;
 
   public lastPage!: number;
 
