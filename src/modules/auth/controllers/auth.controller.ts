@@ -7,10 +7,12 @@ import { UserPasswordDTO } from '../../user/dto/user-password.dto';
 import { CreateUserResponseDto } from '../../user/dto/create-user-response.dto';
 import { UserEmailDTO } from '../../user/dto/user-email.dto';
 import { AuthControllerAbs } from './auth.controller.abstract';
+import { ApiBody, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import type { UpdateResult } from 'typeorm';
 import type { UserLoginDto } from 'src/modules/user/dto/user-login.dto';
 
+@ApiTags('Auth controller')
 @Controller('auth')
 export class AuthController extends AuthControllerAbs {
 
@@ -18,6 +20,8 @@ export class AuthController extends AuthControllerAbs {
     super();
   }
 
+  @ApiBody({ type: [CreateUserResponseDto] })
+  @ApiCreatedResponse({ description: 'Created Succesfully' })
   @Post('/signup')
   public override async signUp(
     @Body() userDto: CreateUserResponseDto,
@@ -25,11 +29,16 @@ export class AuthController extends AuthControllerAbs {
     return this._authService.singUp(userDto);
   }
 
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
   @Get('/email/confirm/:token')
   public override async verifyEmail(@Param('token') token: string): Promise<boolean> {
     return this._authService.verifyEmail(token);
   }
 
+  @ApiBody({ type: [CreateUserResponseDto] })
+  @ApiCreatedResponse({ description: 'SingIn Succesfully' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @UseGuards(RegisterGuard)
   @Post('/login')
   public override async signIn(
@@ -38,6 +47,9 @@ export class AuthController extends AuthControllerAbs {
     return this._authService.singIn(userDto);
   }
 
+  @ApiBody({ type: [UserEmailDTO] })
+  @ApiCreatedResponse({ description: 'Recovery password Succesfully' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @UseGuards(RegisterGuard)
   @Post('/recovery')
   public override async forgotPassword(
@@ -46,6 +58,9 @@ export class AuthController extends AuthControllerAbs {
     return this._authService.forgotPassword(userDto);
   }
 
+  @ApiBody({ type: [UserPasswordDTO] })
+  @ApiCreatedResponse({ description: 'Password reset Succesfully' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @UseGuards(JwtGuard)
   @Post('/reset-password')
   public override async resetPassword(
@@ -55,6 +70,8 @@ export class AuthController extends AuthControllerAbs {
     return this._authService.resetPassword(user, payload);
   }
 
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
   @UseGuards(JwtGuard)
   @Get('/logout')
   public override async logOut(

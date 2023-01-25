@@ -5,7 +5,7 @@ import type { CreateProductDTO } from '../dto/create-product.dto';
 import type { ProductDTO } from '../dto/product.dto';
 import type { PaginationDTO } from '../dto/pagination-result.dto';
 import type { BySortEnum } from 'src/@framework/bysort.enum';
-import { SetImagesToProductDTO } from '../dto/imagest-to-product.dto';
+import type { SetImagesToProductDTO } from '../dto/imagest-to-product.dto';
 
 export abstract class ProductControllerAbs {
 

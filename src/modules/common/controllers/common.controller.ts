@@ -15,11 +15,14 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { CommonService } from '../services/common.service.abstract';
 import { CommonControllerAbs } from './common.controller.abstract';
+import { DeleteImageDTO } from '../dto/delete-image.dto';
+import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import type { DeleteResult } from 'typeorm';
 import type { FileEntity } from '../entities/images.entity';
-import { DeleteImageDTO } from '../dto/delete-image.dto';
+import { FileUploadDto } from '../dto/image.dto';
 
+@ApiTags('File upload controller')
 @Controller()
 export class CommonController extends CommonControllerAbs {
 
@@ -27,6 +30,7 @@ export class CommonController extends CommonControllerAbs {
     super();
   }
 
+  @ApiCreatedResponse({ description: 'Image uploaded Succesfully' })
   @Post('/upload')
   @UseInterceptors(FileInterceptor('file',
     { storage: diskStorage({
@@ -40,6 +44,11 @@ export class CommonController extends CommonControllerAbs {
     }),
     }),
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload image',
+    type: FileUploadDto,
+  })
   public override upload(
     @UploadedFile(
       new ParseFilePipe({
@@ -54,6 +63,9 @@ export class CommonController extends CommonControllerAbs {
     return this._commonService.saveImage(file);
   }
 
+  @ApiBody({ type: [DeleteImageDTO] })
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
   @Delete('/delete')
   public override deleteImage(@Body() name: DeleteImageDTO): Promise<DeleteResult> {
     return this._commonService.deleteImage(name);

@@ -1,5 +1,18 @@
 /* eslint-disable no-console */
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  UseInterceptors,
+  CacheInterceptor,
+  CacheTTL,
+} from '@nestjs/common';
 import { ProductService } from '../services/product.service.abstract';
 import { ProductControllerAbs } from './product.controller.abstract';
 import { ProductUpdateDto } from '../dto/productUpdate.dto';
@@ -8,12 +21,22 @@ import { Authorization } from '../../../@framework/decorators/authorization.deco
 import { CreateProductDTO } from '../dto/create-product.dto';
 import { BySortEnum } from '../../../@framework/bysort.enum';
 import { SetImagesToProductDTO } from '../dto/imagest-to-product.dto';
+import { CommonService } from 'src/modules/common/services/common.service.abstract';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
 
 import type { DeleteResult, UpdateResult } from 'typeorm';
 import type { ProductDTO } from '../dto/product.dto';
 import type { PaginationDTO } from '../dto/pagination-result.dto';
-import { CommonService } from 'src/modules/common/services/common.service.abstract';
 
+@ApiTags('Product controller')
 @Controller('product')
 export class ProductController extends ProductControllerAbs {
 
@@ -24,6 +47,9 @@ export class ProductController extends ProductControllerAbs {
     super();
   }
 
+  @ApiBody({ type: [CreateProductDTO] })
+  @ApiCreatedResponse({ description: 'Created Succesfully' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @Authorization(['vendor'])
   @Post('/add')
   public override async createProduct(
@@ -33,6 +59,11 @@ export class ProductController extends ProductControllerAbs {
     return this._productServise.createProduct(createProductDto);
   }
 
+  @ApiBody({ type: [ProductUpdateDto] })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiOkResponse({ description: 'The resource was updated successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
+  @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @Authorization(['vendor'])
   @Put('/edit/:id')
   public override async editProduct(
@@ -43,6 +74,9 @@ export class ProductController extends ProductControllerAbs {
     return this._productServise.editProduct(id, productUpdateDto);
   }
 
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
   @Authorization(['vendor'])
   @Delete('/delete/:id')
   public override async deleteProduct(
@@ -62,28 +96,44 @@ export class ProductController extends ProductControllerAbs {
     return this._productServise.getListProducts(sort, page, take, categoryIds);
   }
 
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
   @Get('/search/')
   public override async searchProducts(@Query() str: string): Promise<ProductDTO[]> {
     return this._productServise.searchProducts(str);
   }
 
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
   @Get(':id')
   public override async getProduct(@Param('id', ParseIntPipe) id: number,
   ): Promise<ProductDTO | null> {
     return this._productServise.getProduct(id);
   }
 
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
+  @UseInterceptors(CacheInterceptor)
   @Get('/')
+  @CacheTTL(3000)
   public override async getAllProduct(
   ): Promise<ProductDTO[]> {
     return this._productServise.getAllProduct();
   }
 
+  @UseInterceptors(CacheInterceptor)
+  @ApiOkResponse({ description: 'The resource was returned successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
   @Get('/category/:id')
+  @CacheTTL(3000)
   public override async getProductListByCategory(@Param('id') id: string): Promise<ProductDTO[] | null> {
     return this._productServise.getProductListByCategory(+id);
   }
 
+  @ApiBody({ type: [SetImagesToProductDTO] })
+  @ApiOkResponse({ description: 'The resource was updated successfully' })
+  @ApiNotFoundResponse({ description: 'Resource not found' })
+  @ApiUnprocessableEntityResponse({ description: 'Bad Request' })
   @Put('/img/:id')
   public override async setImagesToProduct(
     @Param('id', ParseIntPipe) id: number,

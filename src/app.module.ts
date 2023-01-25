@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
@@ -8,6 +8,7 @@ import { CartModule } from './modules/cart/cart.module';
 import { OrderModule } from './modules/order/order.module';
 import { CommonModule } from './modules/common/common.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -30,6 +31,11 @@ import { CategoriesModule } from './modules/categories/categories.module';
         synchronize: true,
       }),
       inject: [ConfigService],
+    }),
+    CacheModule.register({
+      isGlobal: true,
+      store: redisStore,
+      url: 'redis://localhost:6379',
     }),
     { module: AuthModule, global: true },
     { module: ProductModule, global: true },
